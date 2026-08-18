@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { ChatMessage, PagePerception } from '../../shared/types';
-import { Bot, User, Send, Eye, RefreshCw, Cpu, Settings, Sparkles } from 'lucide-react';
+import { Bot, User, Send, Eye, RefreshCw, Cpu, Sparkles, FileText } from 'lucide-react';
+import { VoiceHUD } from './VoiceHUD';
 
 interface SidebarProps {
   messages: ChatMessage[];
   onSendMessage: (text: string) => void;
   perception: PagePerception | null;
   onRefreshPerception: () => void;
+  onOpenArtifact?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -14,9 +16,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onSendMessage,
   perception,
   onRefreshPerception,
+  onOpenArtifact,
 }) => {
   const [inputText, setInputText] = useState('');
-  const [activeTab, setActiveTab] = useState<'chat' | 'perception' | 'skills' | 'settings'>('chat');
+  const [activeTab, setActiveTab] = useState<'chat' | 'perception' | 'skills'>('chat');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,6 +71,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
             Pineapple AI
           </span>
         </div>
+
+        <VoiceHUD onToggleVoice={(listening) => {
+          if (listening) {
+            onSendMessage("Voice listening active...");
+          }
+        }} />
 
         {/* Tab Navigation Icons */}
         <div style={{ display: 'flex', gap: '4px', backgroundColor: '#0b0f19', padding: '3px', borderRadius: '8px', border: '1px solid #1e293b' }}>
@@ -197,6 +206,29 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <div>{msg.text}</div>
             </div>
           ))}
+
+          {/* Quick Artifact Shortcut Trigger */}
+          {onOpenArtifact && (
+            <button
+              onClick={onOpenArtifact}
+              style={{
+                backgroundColor: '#111827',
+                border: '1px solid #1e293b',
+                borderRadius: '8px',
+                padding: '8px 12px',
+                color: '#06b6d4',
+                fontSize: '12px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                marginTop: '8px',
+              }}
+            >
+              <FileText size={14} /> Open Generated Artifact
+            </button>
+          )}
         </div>
       )}
 

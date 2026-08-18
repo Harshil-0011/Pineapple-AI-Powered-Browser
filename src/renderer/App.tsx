@@ -7,6 +7,8 @@ import { BookmarksBar } from './components/BookmarksBar';
 import { NewTabPage } from './components/NewTabPage';
 import { DownloadsDrawer, DownloadItem } from './components/DownloadsDrawer';
 import { HistoryView, HistoryItem } from './components/HistoryView';
+import { CommandPalette } from './components/CommandPalette';
+import { ArtifactViewer } from './components/ArtifactViewer';
 import { agentService } from './agent-service';
 import './styles.css';
 
@@ -17,6 +19,8 @@ export const App: React.FC = () => {
   const [isVerticalTabs, setIsVerticalTabs] = useState<boolean>(false);
   const [showDownloads, setShowDownloads] = useState<boolean>(false);
   const [showHistoryView, setShowHistoryView] = useState<boolean>(false);
+  const [showCommandPalette, setShowCommandPalette] = useState<boolean>(false);
+  const [showArtifactViewer, setShowArtifactViewer] = useState<boolean>(false);
 
   const [downloads, setDownloads] = useState<DownloadItem[]>([
     { id: '1', filename: 'pineapple-report.pdf', progress: 100, state: 'completed', totalBytes: 2048000, receivedBytes: 2048000 },
@@ -37,7 +41,7 @@ export const App: React.FC = () => {
     {
       id: 'init',
       sender: 'ai',
-      text: 'Hello! I am Pineapple, your AI companion. I can perceive active tabs and perform autonomous actions.',
+      text: 'Hello! I am Pineapple, your AI companion. I can perceive active tabs, execute autonomous workflows, and generate visual artifacts.',
       timestamp: Date.now(),
     },
   ]);
@@ -152,6 +156,7 @@ export const App: React.FC = () => {
         onSendMessage={handleSendMessage}
         perception={perception}
         onRefreshPerception={handleRefreshPerception}
+        onOpenArtifact={() => setShowArtifactViewer(true)}
       />
 
       {/* Vertical Tab Strip Option */}
@@ -201,6 +206,26 @@ export const App: React.FC = () => {
         ) : (
           <div style={{ flex: 1, backgroundColor: '#0b0f19' }} />
         )}
+
+        {/* Command Palette Overlay (Cmd+K) */}
+        <CommandPalette
+          isOpen={showCommandPalette}
+          onClose={() => setShowCommandPalette(false)}
+          tabs={tabs}
+          bookmarks={bookmarks}
+          onSwitchTab={handleSwitchTab}
+          onNavigate={handleNavigate}
+          onSendAIPrompt={handleSendMessage}
+        />
+
+        {/* Visual Artifact Drawer */}
+        <ArtifactViewer
+          isOpen={showArtifactViewer}
+          onClose={() => setShowArtifactViewer(false)}
+          title="Competitive Pricing Audit Matrix"
+          type="table"
+          data={{ summary: 'Synthesized pricing structures across top 5 software competitors.' }}
+        />
 
         {/* Downloads Modal Drawer */}
         {showDownloads && (
