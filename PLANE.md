@@ -16,13 +16,13 @@ Welcome to **Pineapple**, our lightweight, AI-native desktop web browser built w
 ## Master Milestone Roadmap
 
 ### Phase 1: MVP & Desktop Shell Foundation (Completed)
-- [x] Dual-pane workspace layout (Active browser view on right + persistent AI companion sidebar on left).
-- [x] Multi-tab navigation system (add, switch, close tabs, page title updates, favicons).
-- [x] Full browser navigation toolbar (address bar with search/URL resolution, back, forward, reload, home, bookmarking).
-- [x] Lightweight Memory Saver: Automated background tab sleeping loop to discard unused tabs and minimize RAM footprint.
-- [x] Active page DOM perception engine (`data-pineapple-ref` element tagging for interactive controls).
-- [x] Multi-provider AI Companion service (Mock offline engine, OpenAI GPT-4o, Anthropic Claude 3.5 Sonnet, Local Ollama).
-- [x] Comprehensive research dossier (`STRAWBERRY_BROWSER_RESEARCH.md`).
+- [ ] Dual-pane workspace layout (Active browser view on right + persistent AI companion sidebar on left).
+- [ ] Multi-tab navigation system (add, switch, close tabs, page title updates, favicons).
+- [ ] Full browser navigation toolbar (address bar with search/URL resolution, back, forward, reload, home, bookmarking).
+- [ ] Lightweight Memory Saver: Automated background tab sleeping loop to discard unused tabs and minimize RAM footprint.
+- [ ] Active page DOM perception engine (`data-pineapple-ref` element tagging for interactive controls).
+- [ ] Multi-provider AI Companion service (Mock offline engine, OpenAI GPT-4o, Anthropic Claude 3.5 Sonnet, Local Ollama).
+- [ ] Comprehensive research dossier (`STRAWBERRY_BROWSER_RESEARCH.md`).
 
 ---
 
