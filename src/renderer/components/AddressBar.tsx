@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Tab } from '../../shared/types';
-import { ArrowLeft, ArrowRight, RotateCw, Shield, Star } from 'lucide-react';
+import { ArrowLeft, ArrowRight, RotateCw, Shield, ShieldAlert, Star, Download, Clock } from 'lucide-react';
 
 interface AddressBarProps {
   activeTab: Tab | null;
@@ -8,6 +8,8 @@ interface AddressBarProps {
   onGoBack: () => void;
   onGoForward: () => void;
   onReload: () => void;
+  onToggleDownloads: () => void;
+  onToggleHistory: () => void;
 }
 
 export const AddressBar: React.FC<AddressBarProps> = ({
@@ -16,6 +18,8 @@ export const AddressBar: React.FC<AddressBarProps> = ({
   onGoBack,
   onGoForward,
   onReload,
+  onToggleDownloads,
+  onToggleHistory,
 }) => {
   const [inputUrl, setInputUrl] = useState('');
 
@@ -32,15 +36,17 @@ export const AddressBar: React.FC<AddressBarProps> = ({
     }
   };
 
+  const isSecure = activeTab?.url.startsWith('https://');
+
   return (
     <div style={{
       display: 'flex',
       alignItems: 'center',
-      height: '45px',
-      backgroundColor: '#1e293b',
+      height: '42px',
+      backgroundColor: '#111827',
       padding: '0 12px',
       gap: '8px',
-      borderBottom: '1px solid #334155',
+      borderBottom: '1px solid #1e293b',
     }}>
       <button
         disabled={!activeTab?.canGoBack}
@@ -52,7 +58,7 @@ export const AddressBar: React.FC<AddressBarProps> = ({
           cursor: activeTab?.canGoBack ? 'pointer' : 'default',
         }}
       >
-        <ArrowLeft size={18} />
+        <ArrowLeft size={16} />
       </button>
 
       <button
@@ -65,7 +71,7 @@ export const AddressBar: React.FC<AddressBarProps> = ({
           cursor: activeTab?.canGoForward ? 'pointer' : 'default',
         }}
       >
-        <ArrowRight size={18} />
+        <ArrowRight size={16} />
       </button>
 
       <button
@@ -77,7 +83,7 @@ export const AddressBar: React.FC<AddressBarProps> = ({
           cursor: 'pointer',
         }}
       >
-        <RotateCw size={18} />
+        <RotateCw size={16} />
       </button>
 
       <form onSubmit={handleSubmit} style={{ flex: 1, display: 'flex' }}>
@@ -85,18 +91,18 @@ export const AddressBar: React.FC<AddressBarProps> = ({
           display: 'flex',
           alignItems: 'center',
           width: '100%',
-          backgroundColor: '#0f172a',
+          backgroundColor: '#0b0f19',
           borderRadius: '20px',
-          padding: '0 12px',
+          padding: '0 14px',
           gap: '8px',
-          border: '1px solid #334155',
+          border: '1px solid #1e293b',
         }}>
-          <Shield size={14} color="#10b981" />
+          {isSecure ? <Shield size={14} color="#10b981" /> : <ShieldAlert size={14} color="#f59e0b" />}
           <input
             type="text"
             value={inputUrl}
             onChange={(e) => setInputUrl(e.target.value)}
-            placeholder="Search Google or enter a URL..."
+            placeholder="Search Google or type a URL..."
             style={{
               flex: 1,
               background: 'transparent',
@@ -104,12 +110,28 @@ export const AddressBar: React.FC<AddressBarProps> = ({
               outline: 'none',
               color: '#f8fafc',
               fontSize: '13px',
-              height: '32px',
+              height: '30px',
             }}
           />
           <Star size={14} color="#94a3b8" style={{ cursor: 'pointer' }} />
         </div>
       </form>
+
+      <button
+        onClick={onToggleHistory}
+        style={{ border: 'none', background: 'transparent', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}
+        title="History"
+      >
+        <Clock size={16} />
+      </button>
+
+      <button
+        onClick={onToggleDownloads}
+        style={{ border: 'none', background: 'transparent', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}
+        title="Downloads"
+      >
+        <Download size={16} />
+      </button>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { app, BrowserWindow, BrowserView, ipcMain } from 'electron';
+import { app, BrowserWindow, BrowserView, ipcMain, session } from 'electron';
 import * as path from 'path';
 import { Tab, PagePerception, AgentAction } from '../shared/types';
 
@@ -18,10 +18,11 @@ class PineappleBrowserMain {
   private mainWindow: BrowserWindow | null = null;
   private tabs: Map<string, TabView> = new Map();
   private activeTabId: string | null = null;
-  private sidebarWidth: number = 380; // Left companion sidebar width in pixels
+  private sidebarWidth: number = 380;
 
   public async init(): Promise<void> {
     await app.whenReady();
+    this.setupAdBlocker();
     this.createMainWindow();
     this.registerIPCHandlers();
     this.startMemorySaverLoop();
@@ -39,13 +40,30 @@ class PineappleBrowserMain {
     });
   }
 
+  private setupAdBlocker(): void {
+    const filter = {
+      urls: [
+        '*://*.doubleclick.net/*',
+        '*://*.google-analytics.com/*',
+        '*://*.googlesyndication.com/*',
+        '*://*.adservice.google.com/*',
+        '*://*.scorecardresearch.com/*',
+      ],
+    };
+
+    session.defaultSession.webRequest.onBeforeRequest(filter, (details, callback) => {
+      callback({ cancel: true });
+    });
+  }
+
   private createMainWindow(): void {
     this.mainWindow = new BrowserWindow({
-      width: 1400,
+      width: 1440,
       height: 900,
       minWidth: 900,
       minHeight: 600,
       title: 'Pineapple AI Browser',
+      backgroundColor: '#0b0f19',
       webPreferences: {
         preload: path.join(__dirname, 'preload.js'),
         contextIsolation: true,
@@ -54,7 +72,6 @@ class PineappleBrowserMain {
       },
     });
 
-    // In development or production, load the renderer entrypoint
     const isDev = !app.isPackaged && process.env.NODE_ENV !== 'production';
     if (isDev && process.env.VITE_DEV_SERVER_URL) {
       this.mainWindow.loadURL(process.env.VITE_DEV_SERVER_URL);
@@ -70,7 +87,6 @@ class PineappleBrowserMain {
       this.mainWindow = null;
     });
 
-    // Create initial tab
     this.createTab('https://www.google.com');
   }
 
@@ -80,8 +96,7 @@ class PineappleBrowserMain {
     if (!tabView) return;
 
     const [width, height] = this.mainWindow.getContentSize();
-    // Top bar offset (for tab bar + address bar) = 85px
-    const topBarHeight = 85;
+    const topBarHeight = 110;
     tabView.view.setBounds({
       x: this.sidebarWidth,
       y: topBarHeight,
@@ -145,7 +160,6 @@ class PineappleBrowserMain {
   private switchTab(id: string): void {
     if (!this.mainWindow || !this.tabs.has(id)) return;
 
-    // Remove active view if any
     if (this.activeTabId && this.tabs.has(this.activeTabId)) {
       const activeView = this.tabs.get(this.activeTabId)!;
       this.mainWindow.removeBrowserView(activeView.view);
@@ -155,7 +169,6 @@ class PineappleBrowserMain {
     const targetTab = this.tabs.get(id)!;
     targetTab.lastActiveAt = Date.now();
 
-    // If target tab was sleeping, wake it up
     if (targetTab.isSleeping) {
       targetTab.isSleeping = false;
       targetTab.view.webContents.loadURL(targetTab.url);
@@ -312,7 +325,6 @@ class PineappleBrowserMain {
   }
 
   private startMemorySaverLoop(): void {
-    // Check inactive tabs every 2 minutes. Sleep tabs idle for > 15 minutes.
     setInterval(() => {
       const now = Date.now();
       const SLEEP_THRESHOLD = 15 * 60 * 1000;
