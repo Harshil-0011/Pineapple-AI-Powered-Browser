@@ -9,11 +9,34 @@ export interface Tab {
   isSleeping?: boolean;
 }
 
+export type TabInfo = Tab;
+
 export interface Bookmark {
   id: string;
   title: string;
   url: string;
   favicon?: string;
+}
+
+export type BookmarkItem = Bookmark;
+
+export interface HistoryItem {
+  id: string;
+  url: string;
+  title: string;
+  visitedAt: number;
+  timestamp?: number;
+}
+
+export interface DownloadItem {
+  id: string;
+  filename: string;
+  url: string;
+  receivedBytes: number;
+  totalBytes: number;
+  state: 'progressing' | 'completed' | 'cancelled' | 'interrupted' | 'paused';
+  progress?: number;
+  status?: string;
 }
 
 export interface InteractiveElement {

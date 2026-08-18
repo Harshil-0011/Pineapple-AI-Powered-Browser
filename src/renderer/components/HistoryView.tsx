@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
 import { Clock, Search, Trash2, Globe, ExternalLink } from 'lucide-react';
+import { HistoryItem as SharedHistoryItem } from '../../shared/types';
 
-export interface HistoryItem {
-  id: string;
-  title: string;
-  url: string;
-  timestamp: number;
-}
+export type HistoryItem = SharedHistoryItem;
 
 interface HistoryViewProps {
   history: HistoryItem[];
@@ -126,7 +122,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
                   <span style={{ fontSize: '11px', color: '#64748b' }}>
-                    {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    {new Date(item.visitedAt || item.timestamp || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </span>
                   <ExternalLink size={14} color="#94a3b8" />
                 </div>

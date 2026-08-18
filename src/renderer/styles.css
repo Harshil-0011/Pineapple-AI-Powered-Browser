@@ -1,17 +1,111 @@
+@import "tailwindcss";
+
 :root {
-  --bg-obsidian: #0b0f19;
-  --bg-panel: #111827;
-  --bg-card: #1f293d;
-  --bg-hover: #2d3748;
-  --accent-cyan: #06b6d4;
-  --accent-cyan-hover: #0891b2;
-  --accent-blue: #3b82f6;
-  --border-color: #1e293b;
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --danger: #ef4444;
-  --success: #10b981;
+  /* =========================
+     SPACING
+     ========================= */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* =========================
+     SURFACES
+     ========================= */
+  --browser-canvas: #0B0D10;
+  --browser-canvas-deep: #080A0D;
+  --browser-surface: #111418;
+  --browser-surface-secondary: #15191E;
+  --browser-surface-elevated: #1B2026;
+  --browser-surface-active: #222830;
+
+  /* Legacy aliases for compatibility */
+  --bg-obsidian: var(--browser-canvas);
+  --bg-panel: var(--browser-surface);
+  --bg-card: var(--browser-surface-secondary);
+  --bg-hover: var(--browser-surface-elevated);
+
+  /* =========================
+     TEXT
+     ========================= */
+  --browser-text-primary: #F2F4F7;
+  --browser-text-secondary: #A5ACB8;
+  --browser-text-muted: #707783;
+
+  /* Legacy aliases */
+  --text-primary: var(--browser-text-primary);
+  --text-secondary: var(--browser-text-secondary);
+  --text-muted: var(--browser-text-muted);
+
+  /* =========================
+     ACCENTS
+     ========================= */
+  --browser-accent: #8AB4FF;
+  --browser-accent-secondary: #A78BFA;
+  --browser-success: #55C98A;
+  --browser-warning: #E7B75A;
+  --browser-danger: #F06A6A;
+
+  /* Legacy aliases */
+  --accent-cyan: var(--browser-accent);
+  --accent-cyan-hover: #73a0f3;
+  --accent-blue: var(--browser-accent);
+  --danger: var(--browser-danger);
+  --success: var(--browser-success);
+
+  /* =========================
+     BORDERS
+     ========================= */
+  --browser-border-subtle: rgba(255, 255, 255, 0.06);
+  --browser-border: rgba(255, 255, 255, 0.09);
+  --browser-border-strong: rgba(255, 255, 255, 0.14);
+  --border-color: var(--browser-border);
+
+  /* =========================
+     RADIUS
+     ========================= */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-floating: 14px;
+  --radius-modal: 16px;
+
+  /* =========================
+     MOTION
+     ========================= */
+  --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+
+  --motion-micro: 120ms var(--ease-standard);
+  --motion-standard: 200ms var(--ease-standard);
+  --motion-panel: 260ms var(--ease-standard);
+  --motion-expressive: 600ms var(--ease-standard);
+
+  /* =========================
+     TYPOGRAPHY
+     ========================= */
+  --font-ui: "Inter", system-ui, -apple-system, sans-serif;
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* =========================
+     Z-INDEX
+     ========================= */
+  --z-page: 0;
+  --z-chrome: 100;
+  --z-sidebar: 200;
+  --z-floating: 300;
+  --z-popover: 500;
+  --z-modal: 700;
+  --z-toast: 9000;
 }
 
 * {
@@ -23,51 +117,60 @@
 body, html, #root {
   width: 100%;
   height: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--font-ui);
+  font-size: 13px;
   overflow: hidden;
-  background-color: var(--bg-obsidian);
-  color: var(--text-primary);
+  background-color: var(--browser-canvas-deep);
+  color: var(--browser-text-primary);
   user-select: none;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Custom Scrollbars */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg-obsidian);
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: 3px;
+  background: var(--browser-border-strong);
+  border-radius: var(--radius-sm);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--bg-hover);
+  background: var(--browser-surface-active);
 }
 
-/* Glassmorphism Classes */
-.glass-panel {
-  background: rgba(17, 24, 39, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+/* Restrained Surface Utilities */
+.surface-quiet {
+  background: var(--browser-surface);
+  border: 1px solid var(--browser-border-subtle);
 }
 
-.cyan-glow {
-  box-shadow: 0 0 15px rgba(6, 182, 212, 0.25);
+.surface-elevated {
+  background: var(--browser-surface-secondary);
+  border: 1px solid var(--browser-border);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
 }
 
-.btn-hover-glow:hover {
-  background-color: var(--bg-hover);
-  transition: all 0.2s ease;
+.accent-glow {
+  box-shadow: 0 0 12px rgba(138, 180, 255, 0.15);
+}
+
+.btn-hover-quiet {
+  transition: background var(--motion-micro), border-color var(--motion-micro);
+}
+.btn-hover-quiet:hover {
+  background-color: var(--browser-surface-elevated);
+  border-color: var(--browser-border-strong);
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
+  from { opacity: 0; transform: translateY(3px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeIn var(--motion-standard) forwards;
 }

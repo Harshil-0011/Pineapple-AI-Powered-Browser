@@ -23,113 +23,57 @@ export const NewTabPage: React.FC<NewTabPageProps> = ({
   };
 
   const aiPrompts = [
-    'Analyze competitor pricing on current page',
+    'Analyze competitor pricing on active page',
     'Extract lead profiles into Google Sheets format',
     'Summarize key insights and top decisions',
     'Draft a personalized outreach email to prospect',
   ];
 
   return (
-    <div style={{
-      width: '100%',
-      height: '100%',
-      backgroundColor: '#0b0f19',
-      color: '#f8fafc',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '40px 20px',
-      overflowY: 'auto',
-    }}>
-      {/* Brand Header */}
-      <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-        <div style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '72px',
-          height: '72px',
-          borderRadius: '20px',
-          backgroundColor: '#111827',
-          border: '1px solid rgba(6, 182, 212, 0.3)',
-          boxShadow: '0 0 25px rgba(6, 182, 212, 0.2)',
-          marginBottom: '16px',
-        }}>
-          <Sparkles size={36} color="#06b6d4" />
+    <div className="w-full h-full bg-[var(--browser-canvas-deep)] text-[var(--browser-text-primary)] flex flex-col items-center justify-center p-8 overflow-y-auto select-none">
+      {/* Expressive Brand Header */}
+      <div className="text-center mb-8">
+        <div className="inline-flex items-center justify-center w-16 h-16 rounded-[var(--radius-xl)] bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-strong)] accent-glow mb-4">
+          <Sparkles className="w-8 h-8 text-[var(--browser-accent)]" />
         </div>
-        <h1 style={{ fontSize: '32px', fontWeight: 700, letterSpacing: '-0.5px', marginBottom: '8px' }}>
-          Pineapple AI Browser
+        <h1 className="text-3xl font-bold tracking-tight font-[var(--font-display)] text-[var(--browser-text-primary)] mb-2">
+          Pineapple AI
         </h1>
-        <p style={{ color: '#94a3b8', fontSize: '15px', maxWidth: '480px', margin: '0 auto' }}>
-          An ultra-lightweight, agentic browser built for autonomous workflows.
+        <p className="text-sm text-[var(--browser-text-secondary)] max-w-md mx-auto">
+          A quiet spatial workspace designed for fluid navigation and autonomous agent support.
         </p>
       </div>
 
-      {/* Central Search Bar */}
-      <form onSubmit={handleSearch} style={{ width: '100%', maxWidth: '640px', marginBottom: '40px' }}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          backgroundColor: '#111827',
-          borderRadius: '16px',
-          padding: '12px 20px',
-          border: '1px solid #1e293b',
-          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
-        }}>
-          <Search size={20} color="#06b6d4" style={{ marginRight: '12px' }} />
+      {/* Central Omnibox Search Bar */}
+      <form onSubmit={handleSearch} className="w-full max-w-xl mb-10">
+        <div className="flex items-center bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-strong)] focus-within:border-[var(--browser-accent)] rounded-[var(--radius-modal)] px-4 py-3 shadow-xl transition-all">
+          <Search className="w-5 h-5 text-[var(--browser-accent)] mr-3 flex-shrink-0" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search the web or ask Pineapple AI..."
-            style={{
-              flex: 1,
-              background: 'transparent',
-              border: 'none',
-              outline: 'none',
-              color: '#f8fafc',
-              fontSize: '16px',
-            }}
+            className="flex-1 bg-transparent border-none outline-none text-sm text-[var(--browser-text-primary)] placeholder-[var(--browser-text-muted)]"
           />
         </div>
       </form>
 
-      {/* Speed Dial Bookmarks */}
-      <div style={{ width: '100%', maxWidth: '640px', marginBottom: '40px' }}>
-        <h3 style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px', color: '#64748b', marginBottom: '16px', fontWeight: 600 }}>
+      {/* Quick Destinations Grid */}
+      <div className="w-full max-w-xl mb-8">
+        <h3 className="text-[11px] font-semibold uppercase tracking-wider text-[var(--browser-text-muted)] mb-3">
           Quick Destinations
         </h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '16px' }}>
+        <div className="grid grid-cols-4 gap-3">
           {bookmarks.map((bm) => (
             <div
               key={bm.id}
               onClick={() => onNavigate(bm.url)}
-              style={{
-                backgroundColor: '#111827',
-                border: '1px solid #1e293b',
-                borderRadius: '12px',
-                padding: '16px',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: '10px',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-              }}
+              className="bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-subtle)] hover:border-[var(--browser-border)] rounded-[var(--radius-lg)] p-3.5 flex flex-col items-center gap-2 cursor-pointer transition-all group"
             >
-              <div style={{
-                width: '40px',
-                height: '40px',
-                borderRadius: '10px',
-                backgroundColor: '#1f293d',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-                <Globe size={20} color="#3b82f6" />
+              <div className="w-9 h-9 rounded-[var(--radius-md)] bg-[var(--browser-surface)] flex items-center justify-center text-[var(--browser-accent)] group-hover:text-[var(--browser-text-primary)] transition-colors">
+                <Globe className="w-5 h-5" />
               </div>
-              <span style={{ fontSize: '13px', fontWeight: 500, color: '#f8fafc', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '100%', textAlign: 'center' }}>
+              <span className="text-xs font-medium text-[var(--browser-text-primary)] truncate w-full text-center">
                 {bm.title}
               </span>
             </div>
@@ -137,31 +81,20 @@ export const NewTabPage: React.FC<NewTabPageProps> = ({
         </div>
       </div>
 
-      {/* AI Prompt Shortcuts */}
-      <div style={{ width: '100%', maxWidth: '640px' }}>
-        <h3 style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px', color: '#64748b', marginBottom: '16px', fontWeight: 600 }}>
+      {/* Suggested AI Prompts */}
+      <div className="w-full max-w-xl">
+        <h3 className="text-[11px] font-semibold uppercase tracking-wider text-[var(--browser-text-muted)] mb-3">
           Suggested AI Actions
         </h3>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+        <div className="grid grid-cols-2 gap-3">
           {aiPrompts.map((prompt, idx) => (
             <div
               key={idx}
               onClick={() => onSendAIPrompt(prompt)}
-              style={{
-                backgroundColor: '#111827',
-                border: '1px solid #1e293b',
-                borderRadius: '10px',
-                padding: '14px',
-                fontSize: '13px',
-                color: '#94a3b8',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-              }}
+              className="bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-subtle)] hover:border-[var(--browser-accent)] rounded-[var(--radius-md)] p-3 text-xs text-[var(--browser-text-secondary)] hover:text-[var(--browser-text-primary)] cursor-pointer flex items-center gap-2.5 transition-all"
             >
-              <Cpu size={16} color="#06b6d4" />
-              <span>{prompt}</span>
+              <Cpu className="w-4 h-4 text-[var(--browser-accent)] flex-shrink-0" />
+              <span className="truncate">{prompt}</span>
             </div>
           ))}
         </div>

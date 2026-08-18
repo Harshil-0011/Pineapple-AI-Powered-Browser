@@ -1,14 +1,8 @@
 import React from 'react';
-import { Download, CheckCircle, Pause, Folder, X } from 'lucide-react';
+import { Download, CheckCircle, X } from 'lucide-react';
+import { DownloadItem as SharedDownloadItem } from '../../shared/types';
 
-export interface DownloadItem {
-  id: string;
-  filename: string;
-  progress: number; // 0 to 100
-  state: 'progressing' | 'completed' | 'cancelled' | 'paused';
-  totalBytes: number;
-  receivedBytes: number;
-}
+export type DownloadItem = SharedDownloadItem;
 
 interface DownloadsDrawerProps {
   downloads: DownloadItem[];
@@ -65,35 +59,38 @@ export const DownloadsDrawer: React.FC<DownloadsDrawerProps> = ({ downloads, onC
             No recent downloads
           </div>
         ) : (
-          downloads.map((item) => (
-            <div
-              key={item.id}
-              style={{
-                backgroundColor: '#1f293d',
-                borderRadius: '8px',
-                padding: '10px 12px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '6px',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: '13px', fontWeight: 500, color: '#f8fafc', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '220px' }}>
-                  {item.filename}
-                </span>
-                {item.state === 'completed' ? (
-                  <CheckCircle size={16} color="#10b981" />
-                ) : (
-                  <span style={{ fontSize: '11px', color: '#06b6d4' }}>{item.progress}%</span>
-                )}
-              </div>
+          downloads.map((item) => {
+            const pct = item.progress ?? (item.totalBytes > 0 ? Math.round((item.receivedBytes / item.totalBytes) * 100) : 0);
+            return (
+              <div
+                key={item.id}
+                style={{
+                  backgroundColor: '#1f293d',
+                  borderRadius: '8px',
+                  padding: '10px 12px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '6px',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span style={{ fontSize: '13px', fontWeight: 500, color: '#f8fafc', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '220px' }}>
+                    {item.filename}
+                  </span>
+                  {item.state === 'completed' ? (
+                    <CheckCircle size={16} color="#10b981" />
+                  ) : (
+                    <span style={{ fontSize: '11px', color: '#06b6d4' }}>{pct}%</span>
+                  )}
+                </div>
 
-              {/* Progress bar */}
-              <div style={{ width: '100%', height: '4px', backgroundColor: '#334155', borderRadius: '2px', overflow: 'hidden' }}>
-                <div style={{ width: `${item.progress}%`, height: '100%', backgroundColor: item.state === 'completed' ? '#10b981' : '#06b6d4' }} />
+                {/* Progress bar */}
+                <div style={{ width: '100%', height: '4px', backgroundColor: '#334155', borderRadius: '2px', overflow: 'hidden' }}>
+                  <div style={{ width: `${pct}%`, height: '100%', backgroundColor: item.state === 'completed' ? '#10b981' : '#06b6d4' }} />
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
     </div>

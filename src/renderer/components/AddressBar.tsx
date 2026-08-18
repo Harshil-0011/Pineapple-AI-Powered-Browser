@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Tab } from '../../shared/types';
-import { ArrowLeft, ArrowRight, RotateCw, Shield, ShieldAlert, Star, Download, Clock } from 'lucide-react';
+import { ArrowLeft, ArrowRight, RotateCw, Shield, ShieldAlert, Star, Download, Clock, Search } from 'lucide-react';
 
 interface AddressBarProps {
   activeTab: Tab | null;
@@ -39,99 +39,75 @@ export const AddressBar: React.FC<AddressBarProps> = ({
   const isSecure = activeTab?.url.startsWith('https://');
 
   return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      height: '42px',
-      backgroundColor: '#111827',
-      padding: '0 12px',
-      gap: '8px',
-      borderBottom: '1px solid #1e293b',
-    }}>
-      <button
-        disabled={!activeTab?.canGoBack}
-        onClick={onGoBack}
-        style={{
-          border: 'none',
-          background: 'transparent',
-          color: activeTab?.canGoBack ? '#f8fafc' : '#475569',
-          cursor: activeTab?.canGoBack ? 'pointer' : 'default',
-        }}
-      >
-        <ArrowLeft size={16} />
-      </button>
+    <div className="h-10 bg-[var(--browser-surface-secondary)] border-b border-[var(--browser-border-subtle)] px-3 flex items-center gap-2 select-none z-[var(--z-chrome)]">
+      {/* Navigation Controls */}
+      <div className="flex items-center gap-1">
+        <button
+          disabled={!activeTab?.canGoBack}
+          onClick={onGoBack}
+          title="Back"
+          className="p-1.5 rounded-[var(--radius-sm)] text-[var(--browser-text-secondary)] disabled:opacity-30 disabled:cursor-default hover:bg-[var(--browser-surface)] hover:text-[var(--browser-text-primary)] transition-colors"
+        >
+          <ArrowLeft className="w-3.5 h-3.5" />
+        </button>
 
-      <button
-        disabled={!activeTab?.canGoForward}
-        onClick={onGoForward}
-        style={{
-          border: 'none',
-          background: 'transparent',
-          color: activeTab?.canGoForward ? '#f8fafc' : '#475569',
-          cursor: activeTab?.canGoForward ? 'pointer' : 'default',
-        }}
-      >
-        <ArrowRight size={16} />
-      </button>
+        <button
+          disabled={!activeTab?.canGoForward}
+          onClick={onGoForward}
+          title="Forward"
+          className="p-1.5 rounded-[var(--radius-sm)] text-[var(--browser-text-secondary)] disabled:opacity-30 disabled:cursor-default hover:bg-[var(--browser-surface)] hover:text-[var(--browser-text-primary)] transition-colors"
+        >
+          <ArrowRight className="w-3.5 h-3.5" />
+        </button>
 
-      <button
-        onClick={onReload}
-        style={{
-          border: 'none',
-          background: 'transparent',
-          color: '#f8fafc',
-          cursor: 'pointer',
-        }}
-      >
-        <RotateCw size={16} />
-      </button>
+        <button
+          onClick={onReload}
+          title="Reload"
+          className="p-1.5 rounded-[var(--radius-sm)] text-[var(--browser-text-secondary)] hover:bg-[var(--browser-surface)] hover:text-[var(--browser-text-primary)] transition-colors"
+        >
+          <RotateCw className="w-3.5 h-3.5" />
+        </button>
+      </div>
 
-      <form onSubmit={handleSubmit} style={{ flex: 1, display: 'flex' }}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          width: '100%',
-          backgroundColor: '#0b0f19',
-          borderRadius: '20px',
-          padding: '0 14px',
-          gap: '8px',
-          border: '1px solid #1e293b',
-        }}>
-          {isSecure ? <Shield size={14} color="#10b981" /> : <ShieldAlert size={14} color="#f59e0b" />}
+      {/* Central Unified Omnibox */}
+      <form onSubmit={handleSubmit} className="flex-1 flex">
+        <div className="w-full flex items-center gap-2 bg-[var(--browser-surface)] border border-[var(--browser-border-subtle)] focus-within:border-[var(--browser-accent)] rounded-[var(--radius-lg)] px-3 h-7 transition-all">
+          {isSecure ? (
+            <Shield className="w-3.5 h-3.5 text-[var(--browser-success)] flex-shrink-0" />
+          ) : (
+            <Search className="w-3.5 h-3.5 text-[var(--browser-text-muted)] flex-shrink-0" />
+          )}
+
           <input
             type="text"
             value={inputUrl}
             onChange={(e) => setInputUrl(e.target.value)}
-            placeholder="Search Google or type a URL..."
-            style={{
-              flex: 1,
-              background: 'transparent',
-              border: 'none',
-              outline: 'none',
-              color: '#f8fafc',
-              fontSize: '13px',
-              height: '30px',
-            }}
+            placeholder="Search Google or enter address..."
+            className="flex-1 bg-transparent border-none outline-none text-xs text-[var(--browser-text-primary)] placeholder-[var(--browser-text-muted)] h-full"
           />
-          <Star size={14} color="#94a3b8" style={{ cursor: 'pointer' }} />
+
+          <Star className="w-3.5 h-3.5 text-[var(--browser-text-muted)] hover:text-[var(--browser-accent)] cursor-pointer flex-shrink-0 transition-colors" />
         </div>
       </form>
 
-      <button
-        onClick={onToggleHistory}
-        style={{ border: 'none', background: 'transparent', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}
-        title="History"
-      >
-        <Clock size={16} />
-      </button>
+      {/* Actions */}
+      <div className="flex items-center gap-1">
+        <button
+          onClick={onToggleHistory}
+          title="History"
+          className="p-1.5 rounded-[var(--radius-sm)] text-[var(--browser-text-secondary)] hover:bg-[var(--browser-surface)] hover:text-[var(--browser-text-primary)] transition-colors"
+        >
+          <Clock className="w-3.5 h-3.5" />
+        </button>
 
-      <button
-        onClick={onToggleDownloads}
-        style={{ border: 'none', background: 'transparent', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}
-        title="Downloads"
-      >
-        <Download size={16} />
-      </button>
+        <button
+          onClick={onToggleDownloads}
+          title="Downloads"
+          className="p-1.5 rounded-[var(--radius-sm)] text-[var(--browser-text-secondary)] hover:bg-[var(--browser-surface)] hover:text-[var(--browser-text-primary)] transition-colors"
+        >
+          <Download className="w-3.5 h-3.5" />
+        </button>
+      </div>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tab } from '../../shared/types';
-import { Plus, X, Moon, Pin, Volume2, VolumeX, LayoutList } from 'lucide-react';
+import { Plus, X, Moon, LayoutList } from 'lucide-react';
 
 interface TabBarProps {
   tabs: Tab[];
@@ -23,173 +23,104 @@ export const TabBar: React.FC<TabBarProps> = ({
 }) => {
   if (isVertical) {
     return (
-      <div style={{
-        width: '200px',
-        height: '100%',
-        backgroundColor: '#0b0f19',
-        borderRight: '1px solid #1e293b',
-        display: 'flex',
-        flexDirection: 'column',
-        padding: '8px',
-        gap: '4px',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '8px', borderBottom: '1px solid #1e293b' }}>
-          <span style={{ fontSize: '11px', fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase' }}>Tabs ({tabs.length})</span>
+      <div className="w-52 h-full bg-[var(--browser-surface)] border-r border-[var(--browser-border-subtle)] flex flex-col p-2 gap-1 select-none">
+        <div className="flex items-center justify-between pb-2 border-b border-[var(--browser-border-subtle)] px-1">
+          <span className="text-[11px] font-semibold text-[var(--browser-text-muted)] uppercase tracking-wider">
+            Tabs ({tabs.length})
+          </span>
           <button
             onClick={onToggleVertical}
-            style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer' }}
             title="Switch to horizontal tabs"
+            className="text-[var(--browser-text-muted)] hover:text-[var(--browser-text-primary)] transition-colors"
           >
-            <LayoutList size={14} />
+            <LayoutList className="w-3.5 h-3.5" />
           </button>
         </div>
-        <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+
+        <div className="flex-1 overflow-y-auto flex flex-col gap-1">
           {tabs.map((tab) => {
             const isActive = tab.id === activeTabId;
             return (
               <div
                 key={tab.id}
                 onClick={() => onSwitchTab(tab.id)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '8px 10px',
-                  borderRadius: '8px',
-                  backgroundColor: isActive ? '#1e293b' : 'transparent',
-                  color: isActive ? '#f8fafc' : '#94a3b8',
-                  cursor: 'pointer',
-                  fontSize: '13px',
-                }}
+                className={`group flex items-center gap-2 px-2.5 py-1.5 rounded-[var(--radius-md)] cursor-pointer text-xs transition-all border ${
+                  isActive
+                    ? 'bg-[var(--browser-surface-active)] text-[var(--browser-text-primary)] border-[var(--browser-border)] font-medium'
+                    : 'text-[var(--browser-text-secondary)] border-transparent hover:bg-[var(--browser-surface-secondary)] hover:text-[var(--browser-text-primary)]'
+                }`}
               >
-                {tab.isSleeping ? <Moon size={12} color="#06b6d4" /> : null}
-                <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  {tab.title || 'New Tab'}
-                </span>
+                {tab.isSleeping ? <Moon className="w-3 h-3 text-[var(--browser-accent)]" /> : null}
+                <span className="flex-1 truncate">{tab.title || 'New Tab'}</span>
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     onCloseTab(tab.id);
                   }}
-                  style={{ border: 'none', background: 'transparent', color: 'inherit', cursor: 'pointer' }}
+                  className="opacity-0 group-hover:opacity-100 text-[var(--browser-text-muted)] hover:text-[var(--browser-danger)] transition-opacity"
                 >
-                  <X size={12} />
+                  <X className="w-3 h-3" />
                 </button>
               </div>
             );
           })}
         </div>
+
         <button
           onClick={onCreateTab}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '6px',
-            backgroundColor: '#111827',
-            border: '1px solid #1e293b',
-            color: '#f8fafc',
-            borderRadius: '8px',
-            padding: '8px',
-            cursor: 'pointer',
-            fontSize: '12px',
-          }}
+          className="flex items-center justify-center gap-1.5 bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-subtle)] hover:border-[var(--browser-border)] text-[var(--browser-text-primary)] rounded-[var(--radius-md)] p-1.5 text-xs font-medium transition-all"
         >
-          <Plus size={14} /> New Tab
+          <Plus className="w-3.5 h-3.5 text-[var(--browser-accent)]" /> New Tab
         </button>
       </div>
     );
   }
 
   return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      height: '38px',
-      backgroundColor: '#0b0f19',
-      paddingLeft: '8px',
-      paddingRight: '8px',
-      borderBottom: '1px solid #1e293b',
-      overflowX: 'auto',
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flex: 1 }}>
+    <div className="h-8 bg-[var(--browser-canvas-deep)] px-2 border-b border-[var(--browser-border-subtle)] flex items-center justify-between overflow-x-auto select-none z-[var(--z-chrome)]">
+      <div className="flex items-center gap-1 flex-1 overflow-x-auto">
         {tabs.map((tab) => {
           const isActive = tab.id === activeTabId;
           return (
             <div
               key={tab.id}
               onClick={() => onSwitchTab(tab.id)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                height: '30px',
-                padding: '0 12px',
-                borderRadius: '8px 8px 0 0',
-                backgroundColor: isActive ? '#111827' : 'transparent',
-                border: isActive ? '1px solid #1e293b' : '1px solid transparent',
-                borderBottom: 'none',
-                color: isActive ? '#f8fafc' : '#94a3b8',
-                cursor: 'pointer',
-                fontSize: '12px',
-                maxWidth: '220px',
-                minWidth: '120px',
-                userSelect: 'none',
-              }}
+              className={`group flex items-center gap-2 h-7 px-3 rounded-t-[var(--radius-md)] cursor-pointer text-xs max-w-[200px] min-w-[110px] transition-all border ${
+                isActive
+                  ? 'bg-[var(--browser-surface)] text-[var(--browser-text-primary)] border-[var(--browser-border-subtle)] border-b-transparent font-medium'
+                  : 'bg-transparent text-[var(--browser-text-muted)] border-transparent hover:text-[var(--browser-text-secondary)] hover:bg-[var(--browser-surface-secondary)]'
+              }`}
             >
-              {tab.isSleeping ? <Moon size={12} color="#06b6d4" /> : null}
-              <span style={{
-                flex: 1,
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-              }}>
-                {tab.isLoading ? 'Loading...' : tab.title || 'New Tab'}
-              </span>
+              {tab.isSleeping ? <Moon className="w-3 h-3 text-[var(--browser-accent)] flex-shrink-0" /> : null}
+              <span className="flex-1 truncate">{tab.isLoading ? 'Loading...' : tab.title || 'New Tab'}</span>
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   onCloseTab(tab.id);
                 }}
-                style={{
-                  border: 'none',
-                  background: 'transparent',
-                  color: 'inherit',
-                  cursor: 'pointer',
-                  padding: '2px',
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
+                className="opacity-0 group-hover:opacity-100 text-[var(--browser-text-muted)] hover:text-[var(--browser-danger)] transition-opacity"
               >
-                <X size={12} />
+                <X className="w-3 h-3" />
               </button>
             </div>
           );
         })}
+
         <button
           onClick={onCreateTab}
-          style={{
-            border: 'none',
-            backgroundColor: '#111827',
-            color: '#94a3b8',
-            borderRadius: '6px',
-            width: '26px',
-            height: '26px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-          }}
+          title="New Tab"
+          className="w-6 h-6 rounded-[var(--radius-sm)] bg-[var(--browser-surface-secondary)] hover:bg-[var(--browser-surface-active)] text-[var(--browser-text-muted)] hover:text-[var(--browser-text-primary)] flex items-center justify-center transition-colors"
         >
-          <Plus size={14} />
+          <Plus className="w-3.5 h-3.5" />
         </button>
       </div>
+
       <button
         onClick={onToggleVertical}
-        style={{ background: 'transparent', border: 'none', color: '#64748b', cursor: 'pointer', padding: '4px' }}
         title="Switch to vertical tab strip"
+        className="text-[var(--browser-text-muted)] hover:text-[var(--browser-text-primary)] p-1 transition-colors"
       >
-        <LayoutList size={14} />
+        <LayoutList className="w-3.5 h-3.5" />
       </button>
     </div>
   );

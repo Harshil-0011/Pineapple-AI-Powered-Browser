@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Tab, PagePerception, ChatMessage, Bookmark } from '../shared/types';
+import { Tab, PagePerception, ChatMessage, Bookmark, DownloadItem, HistoryItem } from '../shared/types';
+import { ControlRail, RailTab } from './components/ControlRail';
 import { Sidebar } from './components/Sidebar';
 import { TabBar } from './components/TabBar';
 import { AddressBar } from './components/AddressBar';
 import { BookmarksBar } from './components/BookmarksBar';
-import { NewTabPage } from './components/NewTabPage';
-import { DownloadsDrawer, DownloadItem } from './components/DownloadsDrawer';
-import { HistoryView, HistoryItem } from './components/HistoryView';
+import { DownloadsDrawer } from './components/DownloadsDrawer';
+import { HistoryView } from './components/HistoryView';
 import { CommandPalette } from './components/CommandPalette';
 import { ArtifactViewer } from './components/ArtifactViewer';
 import { agentService } from './agent-service';
 import './styles.css';
 
 export const App: React.FC = () => {
+  const [activeRailTab, setActiveRailTab] = useState<RailTab>('workspaces');
+  const [activeWorkspaceName, setActiveWorkspaceName] = useState<string>('Personal');
+
   const [tabs, setTabs] = useState<Tab[]>([]);
   const [activeTabId, setActiveTabId] = useState<string>('');
   const [perception, setPerception] = useState<PagePerception | null>(null);
@@ -23,17 +26,17 @@ export const App: React.FC = () => {
   const [showArtifactViewer, setShowArtifactViewer] = useState<boolean>(false);
 
   const [downloads, setDownloads] = useState<DownloadItem[]>([
-    { id: '1', filename: 'pineapple-report.pdf', progress: 100, state: 'completed', totalBytes: 2048000, receivedBytes: 2048000 },
+    { id: '1', filename: 'pineapple-workspace-export.pdf', url: 'https://example.com/export.pdf', progress: 100, state: 'completed', totalBytes: 2048000, receivedBytes: 2048000 },
   ]);
 
   const [history, setHistory] = useState<HistoryItem[]>([
-    { id: 'h1', title: 'Google', url: 'https://www.google.com', timestamp: Date.now() - 3600000 },
-    { id: 'h2', title: 'GitHub: Let\'s build from here', url: 'https://github.com', timestamp: Date.now() - 1800000 },
+    { id: 'h1', title: 'Google', url: 'https://www.google.com', visitedAt: Date.now() - 3600000 },
+    { id: 'h2', title: 'GitHub Workspace', url: 'https://github.com', visitedAt: Date.now() - 1800000 },
   ]);
 
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([
-    { id: '1', title: 'Google', url: 'https://www.google.com' },
-    { id: '2', title: 'GitHub', url: 'https://github.com' },
+    { id: '1', title: 'Google Search', url: 'https://www.google.com' },
+    { id: '2', title: 'GitHub Dashboard', url: 'https://github.com' },
     { id: '3', title: 'Hacker News', url: 'https://news.ycombinator.com' },
   ]);
 
@@ -41,10 +44,22 @@ export const App: React.FC = () => {
     {
       id: 'init',
       sender: 'ai',
-      text: 'Hello! I am Pineapple, your AI companion. I can perceive active tabs, execute autonomous workflows, and generate visual artifacts.',
+      text: 'Welcome to Pineapple AI Browser. Your quiet spatial workspace is active.',
       timestamp: Date.now(),
     },
   ]);
+
+  // Command Palette global shortcut Listener (Cmd+K / Ctrl+K)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setShowCommandPalette((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   useEffect(() => {
     if (window.pineapple) {
@@ -57,7 +72,7 @@ export const App: React.FC = () => {
         setTabs((prev) => prev.map((t) => (t.id === updatedTab.id ? updatedTab : t)));
         if (updatedTab.title && updatedTab.url && updatedTab.url !== 'about:blank') {
           setHistory((prev) => [
-            { id: `h_${Date.now()}`, title: updatedTab.title, url: updatedTab.url, timestamp: Date.now() },
+            { id: `h_${Date.now()}`, title: updatedTab.title, url: updatedTab.url, visitedAt: Date.now() },
             ...prev,
           ]);
         }
@@ -149,14 +164,34 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div style={{ display: 'flex', width: '100vw', height: '100vh', overflow: 'hidden', backgroundColor: '#0b0f19' }}>
-      {/* Left Pane: AI Companion Sidebar */}
+    <div className="flex w-screen h-screen overflow-hidden bg-[var(--browser-canvas-deep)] text-[var(--browser-text-primary)] font-[var(--font-ui)] antialiased select-none">
+      {/* Layer 1: Control Rail (Persistent 52px spatial anchor) */}
+      <ControlRail
+        activeTab={activeRailTab}
+        onTabSelect={(tab) => setActiveRailTab(tab)}
+        activeWorkspaceName={activeWorkspaceName}
+        onNewTab={handleCreateTab}
+      />
+
+      {/* Layer 2: Context Sidebar (Contextual 280px workspace surface) */}
       <Sidebar
+        activeRailTab={activeRailTab}
         messages={messages}
         onSendMessage={handleSendMessage}
         perception={perception}
         onRefreshPerception={handleRefreshPerception}
         onOpenArtifact={() => setShowArtifactViewer(true)}
+        tabs={tabs}
+        activeTabId={activeTabId}
+        onSelectTab={handleSwitchTab}
+        onCloseTab={handleCloseTab}
+        onNewTab={handleCreateTab}
+        activeWorkspaceName={activeWorkspaceName}
+        onSwitchWorkspace={(ws) => setActiveWorkspaceName(ws)}
+        bookmarks={bookmarks}
+        history={history}
+        downloads={downloads}
+        onClearHistory={() => setHistory([])}
       />
 
       {/* Vertical Tab Strip Option */}
@@ -172,8 +207,8 @@ export const App: React.FC = () => {
         />
       )}
 
-      {/* Right Main Pane: Browser Workspace */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', height: '100%', position: 'relative' }}>
+      {/* Layer 3: Content Canvas (Web Viewport Chrome) */}
+      <div className="flex-1 flex flex-col h-full relative overflow-hidden bg-[var(--browser-canvas-deep)]">
         {!isVerticalTabs && (
           <TabBar
             tabs={tabs}
@@ -196,7 +231,7 @@ export const App: React.FC = () => {
         />
         <BookmarksBar bookmarks={bookmarks} onNavigate={handleNavigate} />
 
-        {/* Viewport content display */}
+        {/* Viewport content area */}
         {showHistoryView ? (
           <HistoryView
             history={history}
@@ -204,7 +239,7 @@ export const App: React.FC = () => {
             onClearHistory={() => setHistory([])}
           />
         ) : (
-          <div style={{ flex: 1, backgroundColor: '#0b0f19' }} />
+          <div className="flex-1 bg-[var(--browser-canvas-deep)] relative" />
         )}
 
         {/* Command Palette Overlay (Cmd+K) */}
@@ -222,9 +257,9 @@ export const App: React.FC = () => {
         <ArtifactViewer
           isOpen={showArtifactViewer}
           onClose={() => setShowArtifactViewer(false)}
-          title="Competitive Pricing Audit Matrix"
+          title="Competitive Market Audit Matrix"
           type="table"
-          data={{ summary: 'Synthesized pricing structures across top 5 software competitors.' }}
+          data={{ summary: 'Synthesized pricing structures across top software competitors.' }}
         />
 
         {/* Downloads Modal Drawer */}

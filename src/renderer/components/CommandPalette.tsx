@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Globe, Cpu } from 'lucide-react';
+import { Search, Globe, Cpu, Layers, Bookmark as BookmarkIcon, History } from 'lucide-react';
 import { Tab, Bookmark } from '../../shared/types';
 
 interface CommandPaletteProps {
@@ -53,43 +53,30 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     }
   };
 
+  const filteredTabs = tabs.filter(
+    (t) =>
+      t.title.toLowerCase().includes(query.toLowerCase()) ||
+      t.url.toLowerCase().includes(query.toLowerCase())
+  );
+
+  const filteredBookmarks = bookmarks.filter(
+    (b) =>
+      b.title.toLowerCase().includes(query.toLowerCase()) ||
+      b.url.toLowerCase().includes(query.toLowerCase())
+  );
+
   return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100vw',
-      height: '100vh',
-      backgroundColor: 'rgba(11, 15, 25, 0.75)',
-      backdropFilter: 'blur(8px)',
-      zIndex: 1000,
-      display: 'flex',
-      justifyContent: 'center',
-      paddingTop: '120px',
-    }} onClick={onClose}>
+    <div
+      onClick={onClose}
+      className="fixed inset-0 bg-black/60 backdrop-blur-md z-[var(--z-modal)] flex justify-center pt-24 animate-fade-in select-none"
+    >
       <div
         onClick={(e) => e.stopPropagation()}
-        style={{
-          width: '600px',
-          maxHeight: '420px',
-          backgroundColor: '#111827',
-          border: '1px solid #1e293b',
-          borderRadius: '16px',
-          boxShadow: '0 20px 50px rgba(0, 0, 0, 0.6)',
-          display: 'flex',
-          flexDirection: 'column',
-          overflow: 'hidden',
-        }}
+        className="w-[580px] max-h-[440px] bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-strong)] rounded-[var(--radius-modal)] shadow-2xl flex flex-col overflow-hidden text-[var(--browser-text-primary)]"
       >
-        {/* Input Bar */}
-        <div style={{
-          padding: '16px 20px',
-          borderBottom: '1px solid #1e293b',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '12px',
-        }}>
-          <Search size={20} color="#06b6d4" />
+        {/* Command Search Bar */}
+        <div className="p-4 border-b border-[var(--browser-border)] flex items-center gap-3 bg-[var(--browser-surface)]">
+          <Search className="w-5 h-5 text-[var(--browser-accent)] flex-shrink-0" />
           <input
             type="text"
             autoFocus
@@ -98,87 +85,75 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
             onKeyDown={(e) => {
               if (e.key === 'Enter') handleRunAI();
             }}
-            placeholder="Search open tabs, bookmarks, or prompt Pineapple AI..."
-            style={{
-              flex: 1,
-              background: 'transparent',
-              border: 'none',
-              outline: 'none',
-              color: '#f8fafc',
-              fontSize: '15px',
-            }}
+            placeholder="Search tabs, bookmarks, workspaces, or run AI command..."
+            className="flex-1 bg-transparent border-none outline-none text-sm text-[var(--browser-text-primary)] placeholder-[var(--browser-text-muted)] font-[var(--font-ui)]"
           />
-          <kbd style={{
-            fontSize: '11px',
-            color: '#64748b',
-            backgroundColor: '#0b0f19',
-            border: '1px solid #1e293b',
-            borderRadius: '4px',
-            padding: '2px 6px',
-          }}>
+          <kbd className="text-[10px] font-mono text-[var(--browser-text-muted)] bg-[var(--browser-surface-secondary)] border border-[var(--browser-border)] rounded px-1.5 py-0.5">
             ESC
           </kbd>
         </div>
 
-        {/* Results Body */}
-        <div style={{ flex: 1, padding: '12px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          {/* AI Action Command */}
+        {/* Grouped Results Surface */}
+        <div className="flex-1 p-3 overflow-y-auto flex flex-col gap-4 bg-[var(--browser-surface-secondary)]">
+          {/* AI Command Action */}
           {query.trim() && (
             <div>
-              <div style={{ fontSize: '11px', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', marginBottom: '6px' }}>
-                AI Command
+              <div className="text-[10px] font-semibold text-[var(--browser-text-muted)] uppercase tracking-wider mb-1.5 px-2">
+                AI COMMAND
               </div>
               <div
                 onClick={handleRunAI}
-                style={{
-                  backgroundColor: '#1f293d',
-                  borderRadius: '8px',
-                  padding: '10px 14px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  cursor: 'pointer',
-                  color: '#06b6d4',
-                  fontSize: '13px',
-                  fontWeight: 500,
-                }}
+                className="p-2.5 rounded-[var(--radius-md)] bg-[var(--browser-surface-active)] border border-[var(--browser-border-strong)] hover:border-[var(--browser-accent)] flex items-center gap-2.5 cursor-pointer text-xs font-medium text-[var(--browser-accent)] transition-all"
               >
-                <Cpu size={16} color="#06b6d4" />
-                <span>Ask Pineapple AI: "{query}"</span>
+                <Cpu className="w-4 h-4 text-[var(--browser-accent)] flex-shrink-0" />
+                <span>Execute Pineapple AI command: "{query}"</span>
               </div>
             </div>
           )}
 
           {/* Open Tabs */}
           <div>
-            <div style={{ fontSize: '11px', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', marginBottom: '6px' }}>
-              Open Tabs
+            <div className="text-[10px] font-semibold text-[var(--browser-text-muted)] uppercase tracking-wider mb-1.5 px-2">
+              OPEN TABS ({filteredTabs.length})
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-              {tabs.map((tab) => (
+            <div className="flex flex-col gap-1">
+              {filteredTabs.map((tab) => (
                 <div
                   key={tab.id}
                   onClick={() => handleSelectTab(tab.id)}
-                  style={{
-                    backgroundColor: 'transparent',
-                    borderRadius: '8px',
-                    padding: '8px 12px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                    cursor: 'pointer',
-                    color: '#f8fafc',
-                    fontSize: '13px',
-                  }}
+                  className="p-2 rounded-[var(--radius-md)] hover:bg-[var(--browser-surface-active)] flex items-center gap-2.5 cursor-pointer text-xs text-[var(--browser-text-primary)] transition-colors"
                 >
-                  <Globe size={16} color="#3b82f6" />
-                  <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {tab.title || tab.url}
-                  </span>
+                  <Globe className="w-4 h-4 text-[var(--browser-accent)] flex-shrink-0" />
+                  <span className="flex-1 truncate">{tab.title || tab.url}</span>
                 </div>
               ))}
             </div>
           </div>
+
+          {/* Bookmarks */}
+          {filteredBookmarks.length > 0 && (
+            <div>
+              <div className="text-[10px] font-semibold text-[var(--browser-text-muted)] uppercase tracking-wider mb-1.5 px-2">
+                BOOKMARKS ({filteredBookmarks.length})
+              </div>
+              <div className="flex flex-col gap-1">
+                {filteredBookmarks.map((b) => (
+                  <div
+                    key={b.id}
+                    onClick={() => {
+                      onNavigate(b.url);
+                      onClose();
+                    }}
+                    className="p-2 rounded-[var(--radius-md)] hover:bg-[var(--browser-surface-active)] flex items-center gap-2.5 cursor-pointer text-xs text-[var(--browser-text-primary)] transition-colors"
+                  >
+                    <BookmarkIcon className="w-4 h-4 text-[var(--browser-accent-secondary)] flex-shrink-0" />
+                    <span className="flex-1 truncate">{b.title}</span>
+                    <span className="text-[10px] text-[var(--browser-text-muted)] truncate">{b.url}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

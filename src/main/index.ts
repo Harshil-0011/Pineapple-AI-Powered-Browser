@@ -18,7 +18,8 @@ class PineappleBrowserMain {
   private mainWindow: BrowserWindow | null = null;
   private tabs: Map<string, TabView> = new Map();
   private activeTabId: string | null = null;
-  private sidebarWidth: number = 380;
+  // Control Rail (52px) + Context Sidebar (280px) = 332px
+  private sidebarWidth: number = 332;
 
   public async init(): Promise<void> {
     await app.whenReady();
@@ -63,7 +64,7 @@ class PineappleBrowserMain {
       minWidth: 900,
       minHeight: 600,
       title: 'Pineapple AI Browser',
-      backgroundColor: '#0b0f19',
+      backgroundColor: '#080A0D',
       webPreferences: {
         preload: path.join(__dirname, 'preload.js'),
         contextIsolation: true,
@@ -96,7 +97,8 @@ class PineappleBrowserMain {
     if (!tabView) return;
 
     const [width, height] = this.mainWindow.getContentSize();
-    const topBarHeight = 110;
+    // TabBar (~36px) + AddressBar (~40px) + BookmarksBar (~28px) = 104px
+    const topBarHeight = 104;
     tabView.view.setBounds({
       x: this.sidebarWidth,
       y: topBarHeight,
