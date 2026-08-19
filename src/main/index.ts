@@ -18,8 +18,14 @@ class PineappleBrowserMain {
   private mainWindow: BrowserWindow | null = null;
   private tabs: Map<string, TabView> = new Map();
   private activeTabId: string | null = null;
-  // Control Rail (52px) + Context Sidebar (280px) = 332px
-  private sidebarWidth: number = 332;
+
+  // Dynamic layout geometry provided by Renderer Shell
+  private currentBounds = {
+    x: 332,
+    y: 104,
+    width: 1108,
+    height: 796,
+  };
 
   public async init(): Promise<void> {
     await app.whenReady();
@@ -96,14 +102,11 @@ class PineappleBrowserMain {
     const tabView = this.tabs.get(this.activeTabId);
     if (!tabView) return;
 
-    const [width, height] = this.mainWindow.getContentSize();
-    // TabBar (~36px) + AddressBar (~40px) + BookmarksBar (~28px) = 104px
-    const topBarHeight = 104;
     tabView.view.setBounds({
-      x: this.sidebarWidth,
-      y: topBarHeight,
-      width: Math.max(100, width - this.sidebarWidth),
-      height: Math.max(100, height - topBarHeight),
+      x: Math.max(0, this.currentBounds.x),
+      y: Math.max(0, this.currentBounds.y),
+      width: Math.max(100, this.currentBounds.width),
+      height: Math.max(100, this.currentBounds.height),
     });
   }
 
@@ -384,6 +387,12 @@ class PineappleBrowserMain {
     });
     ipcMain.handle('tab:getPerception', (_, id) => this.getPagePerception(id));
     ipcMain.handle('tab:executeAction', (_, id, action) => this.executeAgentAction(id, action));
+    ipcMain.handle('viewport:updateBounds', (_, bounds) => {
+      if (bounds && typeof bounds.x === 'number') {
+        this.currentBounds = bounds;
+        this.updateActiveViewBounds();
+      }
+    });
   }
 }
 

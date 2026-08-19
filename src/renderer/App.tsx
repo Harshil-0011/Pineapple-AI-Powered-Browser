@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Tab, PagePerception, ChatMessage, Bookmark, DownloadItem, HistoryItem } from '../shared/types';
 import { ControlRail, RailTab } from './components/ControlRail';
 import { Sidebar } from './components/Sidebar';
@@ -7,6 +7,7 @@ import { AddressBar } from './components/AddressBar';
 import { BookmarksBar } from './components/BookmarksBar';
 import { DownloadsDrawer } from './components/DownloadsDrawer';
 import { HistoryView } from './components/HistoryView';
+import { SettingsView } from './components/SettingsView';
 import { CommandPalette } from './components/CommandPalette';
 import { ArtifactViewer } from './components/ArtifactViewer';
 import { agentService } from './agent-service';
@@ -15,6 +16,7 @@ import './styles.css';
 export const App: React.FC = () => {
   const [activeRailTab, setActiveRailTab] = useState<RailTab>('workspaces');
   const [activeWorkspaceName, setActiveWorkspaceName] = useState<string>('Personal');
+  const [themeMode, setThemeMode] = useState<'dark' | 'light'>('dark');
 
   const [tabs, setTabs] = useState<Tab[]>([]);
   const [activeTabId, setActiveTabId] = useState<string>('');
@@ -24,6 +26,8 @@ export const App: React.FC = () => {
   const [showHistoryView, setShowHistoryView] = useState<boolean>(false);
   const [showCommandPalette, setShowCommandPalette] = useState<boolean>(false);
   const [showArtifactViewer, setShowArtifactViewer] = useState<boolean>(false);
+
+  const viewportRef = useRef<HTMLDivElement>(null);
 
   const [downloads, setDownloads] = useState<DownloadItem[]>([
     { id: '1', filename: 'pineapple-workspace-export.pdf', url: 'https://example.com/export.pdf', progress: 100, state: 'completed', totalBytes: 2048000, receivedBytes: 2048000 },
@@ -49,7 +53,32 @@ export const App: React.FC = () => {
     },
   ]);
 
-  // Command Palette global shortcut Listener (Cmd+K / Ctrl+K)
+  // Layout-owned geometry synchronization with Electron Main Process
+  useEffect(() => {
+    const syncViewport = () => {
+      if (viewportRef.current && (window as any).pineapple?.updateViewportBounds) {
+        const rect = viewportRef.current.getBoundingClientRect();
+        (window as any).pineapple.updateViewportBounds({
+          x: Math.round(rect.left),
+          y: Math.round(rect.top),
+          width: Math.round(rect.width),
+          height: Math.round(rect.height),
+        });
+      }
+    };
+
+    syncViewport();
+    window.addEventListener('resize', syncViewport);
+    const observer = new ResizeObserver(syncViewport);
+    if (viewportRef.current) observer.observe(viewportRef.current);
+
+    return () => {
+      window.removeEventListener('resize', syncViewport);
+      observer.disconnect();
+    };
+  }, [activeRailTab, isVerticalTabs, showHistoryView]);
+
+  // Command Palette shortcut (Cmd+K / Ctrl+K)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
@@ -62,13 +91,13 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (window.pineapple) {
-      const unsubChanged = window.pineapple.onTabsChanged((updatedTabs, newActiveId) => {
+    if ((window as any).pineapple) {
+      const unsubChanged = (window as any).pineapple.onTabsChanged((updatedTabs: Tab[], newActiveId: string) => {
         setTabs(updatedTabs);
         setActiveTabId(newActiveId);
       });
 
-      const unsubUpdated = window.pineapple.onTabUpdated((updatedTab) => {
+      const unsubUpdated = (window as any).pineapple.onTabUpdated((updatedTab: Tab) => {
         setTabs((prev) => prev.map((t) => (t.id === updatedTab.id ? updatedTab : t)));
         if (updatedTab.title && updatedTab.url && updatedTab.url !== 'about:blank') {
           setHistory((prev) => [
@@ -88,46 +117,46 @@ export const App: React.FC = () => {
   const activeTab = tabs.find((t) => t.id === activeTabId) || null;
 
   const handleCreateTab = () => {
-    window.pineapple?.createTab('https://www.google.com');
+    (window as any).pineapple?.createTab('https://www.google.com');
   };
 
   const handleCloseTab = (id: string) => {
-    window.pineapple?.closeTab(id);
+    (window as any).pineapple?.closeTab(id);
   };
 
   const handleSwitchTab = (id: string) => {
     setShowHistoryView(false);
-    window.pineapple?.switchTab(id);
+    (window as any).pineapple?.switchTab(id);
   };
 
   const handleNavigate = (url: string) => {
     setShowHistoryView(false);
     if (activeTabId) {
-      window.pineapple?.navigateTab(activeTabId, url);
+      (window as any).pineapple?.navigateTab(activeTabId, url);
     }
   };
 
   const handleGoBack = () => {
     if (activeTabId) {
-      window.pineapple?.goBack(activeTabId);
+      (window as any).pineapple?.goBack(activeTabId);
     }
   };
 
   const handleGoForward = () => {
     if (activeTabId) {
-      window.pineapple?.goForward(activeTabId);
+      (window as any).pineapple?.goForward(activeTabId);
     }
   };
 
   const handleReload = () => {
     if (activeTabId) {
-      window.pineapple?.reloadTab(activeTabId);
+      (window as any).pineapple?.reloadTab(activeTabId);
     }
   };
 
   const handleRefreshPerception = async () => {
-    if (activeTabId && window.pineapple) {
-      const p = await window.pineapple.getPerception(activeTabId);
+    if (activeTabId && (window as any).pineapple) {
+      const p = await (window as any).pineapple.getPerception(activeTabId);
       setPerception(p);
     }
   };
@@ -142,8 +171,8 @@ export const App: React.FC = () => {
     setMessages((prev) => [...prev, userMsg]);
 
     let currentP = perception;
-    if (activeTabId && window.pineapple) {
-      currentP = await window.pineapple.getPerception(activeTabId);
+    if (activeTabId && (window as any).pineapple) {
+      currentP = await (window as any).pineapple.getPerception(activeTabId);
       setPerception(currentP);
     }
 
@@ -158,14 +187,17 @@ export const App: React.FC = () => {
     };
     setMessages((prev) => [...prev, aiMsg]);
 
-    if (res.action && activeTabId && window.pineapple) {
-      await window.pineapple.executeAction(activeTabId, res.action);
+    if (res.action && activeTabId && (window as any).pineapple) {
+      await (window as any).pineapple.executeAction(activeTabId, res.action);
     }
   };
 
   return (
-    <div className="flex w-screen h-screen overflow-hidden bg-[var(--browser-canvas-deep)] text-[var(--browser-text-primary)] font-[var(--font-ui)] antialiased select-none">
-      {/* Layer 1: Control Rail (Persistent 52px spatial anchor) */}
+    <div
+      data-theme={themeMode}
+      className="flex w-screen h-screen overflow-hidden bg-[var(--browser-canvas-deep)] text-[var(--browser-text-primary)] font-[var(--font-ui)] antialiased select-none"
+    >
+      {/* LAYER 1: Control Rail (Persistent 52px spatial anchor) */}
       <ControlRail
         activeTab={activeRailTab}
         onTabSelect={(tab) => setActiveRailTab(tab)}
@@ -173,7 +205,7 @@ export const App: React.FC = () => {
         onNewTab={handleCreateTab}
       />
 
-      {/* Layer 2: Context Sidebar (Contextual 280px workspace surface) */}
+      {/* LAYER 2: Context Sidebar (Resizable 280px drawer surface) */}
       <Sidebar
         activeRailTab={activeRailTab}
         messages={messages}
@@ -207,7 +239,7 @@ export const App: React.FC = () => {
         />
       )}
 
-      {/* Layer 3: Content Canvas (Web Viewport Chrome) */}
+      {/* LAYER 3: Content Canvas (Web Viewport Chrome) */}
       <div className="flex-1 flex flex-col h-full relative overflow-hidden bg-[var(--browser-canvas-deep)]">
         {!isVerticalTabs && (
           <TabBar
@@ -231,15 +263,20 @@ export const App: React.FC = () => {
         />
         <BookmarksBar bookmarks={bookmarks} onNavigate={handleNavigate} />
 
-        {/* Viewport content area */}
-        {showHistoryView ? (
+        {/* Viewport Content Area / Settings Page / History View */}
+        {activeRailTab === 'settings' ? (
+          <SettingsView
+            currentTheme={themeMode}
+            onToggleTheme={() => setThemeMode(themeMode === 'dark' ? 'light' : 'dark')}
+          />
+        ) : showHistoryView ? (
           <HistoryView
             history={history}
             onNavigate={handleNavigate}
             onClearHistory={() => setHistory([])}
           />
         ) : (
-          <div className="flex-1 bg-[var(--browser-canvas-deep)] relative" />
+          <div ref={viewportRef} className="flex-1 bg-[var(--browser-canvas-deep)] relative" />
         )}
 
         {/* Command Palette Overlay (Cmd+K) */}
