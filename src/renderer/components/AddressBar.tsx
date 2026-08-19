@@ -11,6 +11,7 @@ import {
   Clock,
   Lock,
 } from 'lucide-react';
+import { VoiceHUD } from './VoiceHUD';
 
 interface AddressBarProps {
   activeTab: Tab | null;
@@ -97,6 +98,7 @@ export const AddressBar: React.FC<AddressBarProps> = ({
 
       {/* Action Drawer Triggers */}
       <div className="flex items-center gap-1 shrink-0 ml-auto">
+        <VoiceHUD onToggleVoice={(active) => console.log('Voice mode active:', active)} />
         {onToggleHistory && (
           <button
             onClick={onToggleHistory}

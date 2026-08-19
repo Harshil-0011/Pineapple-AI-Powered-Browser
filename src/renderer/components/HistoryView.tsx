@@ -24,72 +24,38 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
   );
 
   return (
-    <div style={{
-      width: '100%',
-      height: '100%',
-      backgroundColor: '#0b0f19',
-      color: '#f8fafc',
-      padding: '32px',
-      overflowY: 'auto',
-    }}>
-      <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+    <div className="w-full h-full bg-[var(--browser-canvas-deep)] text-[var(--browser-text-primary)] p-8 overflow-y-auto select-none">
+      <div className="max-w-3xl mx-auto flex flex-col gap-6">
         {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <Clock size={28} color="#f59e0b" />
-            <h2 style={{ fontSize: '24px', fontWeight: 700 }}>Browsing History</h2>
+        <div className="flex items-center justify-between pb-4 border-b border-[var(--browser-border-subtle)]">
+          <div className="flex items-center gap-3">
+            <Clock size={24} className="text-[var(--browser-warning)]" />
+            <h1 className="text-xl font-bold font-[var(--font-display)]">Browsing History</h1>
           </div>
           <button
             onClick={onClearHistory}
-            style={{
-              backgroundColor: '#ef4444',
-              color: '#ffffff',
-              border: 'none',
-              borderRadius: '8px',
-              padding: '8px 16px',
-              fontSize: '13px',
-              fontWeight: 500,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-            }}
+            className="capsule px-3 py-1.5 text-xs text-[var(--browser-danger)] border-[var(--browser-danger)] hover:bg-[var(--browser-surface-hover)] flex items-center gap-1.5"
           >
             <Trash2 size={14} /> Clear History
           </button>
         </div>
 
         {/* Search Bar */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          backgroundColor: '#111827',
-          borderRadius: '12px',
-          padding: '10px 16px',
-          border: '1px solid #1e293b',
-          marginBottom: '24px',
-        }}>
-          <Search size={18} color="#94a3b8" style={{ marginRight: '10px' }} />
+        <div className="flex items-center bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-subtle)] rounded-full px-4 py-2.5">
+          <Search size={16} className="text-[var(--browser-text-muted)] mr-2.5 shrink-0" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search history by page title or URL..."
-            style={{
-              flex: 1,
-              background: 'transparent',
-              border: 'none',
-              outline: 'none',
-              color: '#f8fafc',
-              fontSize: '14px',
-            }}
+            placeholder="Search history by title or URL..."
+            className="flex-1 bg-transparent border-none outline-none text-xs text-[var(--browser-text-primary)] placeholder-[var(--browser-text-muted)]"
           />
         </div>
 
         {/* History Item List */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <div className="flex flex-col gap-2">
           {filteredHistory.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '48px', color: '#64748b', fontSize: '14px' }}>
+            <div className="text-center py-12 text-[var(--browser-text-muted)] text-xs">
               No history entries found.
             </div>
           ) : (
@@ -97,34 +63,24 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
               <div
                 key={item.id}
                 onClick={() => onNavigate(item.url)}
-                style={{
-                  backgroundColor: '#111827',
-                  border: '1px solid #1e293b',
-                  borderRadius: '10px',
-                  padding: '12px 16px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                }}
+                className="bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-subtle)] hover:border-[var(--browser-border)] rounded-xl p-3 flex items-center justify-between cursor-pointer transition-colors"
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1, overflow: 'hidden' }}>
-                  <Globe size={18} color="#3b82f6" style={{ flexShrink: 0 }} />
-                  <div style={{ overflow: 'hidden' }}>
-                    <div style={{ fontSize: '14px', fontWeight: 500, color: '#f8fafc', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                <div className="flex items-center gap-3 flex-1 overflow-hidden">
+                  <Globe size={16} className="text-[var(--browser-accent)] shrink-0" />
+                  <div className="overflow-hidden">
+                    <div className="text-xs font-medium text-[var(--browser-text-primary)] truncate">
                       {item.title}
                     </div>
-                    <div style={{ fontSize: '12px', color: '#64748b', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    <div className="text-[11px] text-[var(--browser-text-muted)] truncate">
                       {item.url}
                     </div>
                   </div>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
-                  <span style={{ fontSize: '11px', color: '#64748b' }}>
+                <div className="flex items-center gap-3 shrink-0 ml-4">
+                  <span className="text-[10px] text-[var(--browser-text-muted)] font-mono">
                     {new Date(item.visitedAt || item.timestamp || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </span>
-                  <ExternalLink size={14} color="#94a3b8" />
+                  <ExternalLink size={14} className="text-[var(--browser-text-muted)]" />
                 </div>
               </div>
             ))

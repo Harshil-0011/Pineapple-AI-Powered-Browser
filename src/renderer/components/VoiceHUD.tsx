@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mic, MicOff, Radio } from 'lucide-react';
+import { Mic, Radio } from 'lucide-react';
 
 interface VoiceHUDProps {
   onToggleVoice: (isListening: boolean) => void;
@@ -15,37 +15,21 @@ export const VoiceHUD: React.FC<VoiceHUDProps> = ({ onToggleVoice }) => {
   };
 
   return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      gap: '8px',
-      backgroundColor: '#0b0f19',
-      border: '1px solid #1e293b',
-      borderRadius: '20px',
-      padding: '4px 10px',
-    }}>
+    <div className="flex items-center gap-2 bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-subtle)] rounded-full px-2.5 py-1 select-none">
       <button
         onClick={handleToggle}
-        style={{
-          background: 'transparent',
-          border: 'none',
-          color: isListening ? '#ef4444' : '#06b6d4',
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '6px',
-          fontSize: '11px',
-          fontWeight: 600,
-        }}
+        className={`flex items-center gap-1.5 text-[11px] font-semibold transition-colors ${
+          isListening ? 'text-[var(--browser-danger)]' : 'text-[var(--browser-accent-cyan)]'
+        }`}
       >
         {isListening ? (
           <>
-            <Radio size={14} color="#ef4444" style={{ animation: 'pulse 1s infinite' }} />
-            <span style={{ color: '#ef4444' }}>Voice Active</span>
+            <Radio size={14} className="text-[var(--browser-danger)] animate-pulse" />
+            <span>Voice Active</span>
           </>
         ) : (
           <>
-            <Mic size={14} color="#06b6d4" />
+            <Mic size={14} className="text-[var(--browser-accent-cyan)]" />
             <span>Voice Mode</span>
           </>
         )}

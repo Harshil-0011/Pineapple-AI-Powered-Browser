@@ -21,10 +21,10 @@ class PineappleBrowserMain {
 
   // Dynamic layout geometry provided by Renderer Shell
   private currentBounds = {
-    x: 332,
-    y: 104,
-    width: 1108,
-    height: 796,
+      x: 0,
+      y: 0,
+      width: 0,
+      height: 0,
   };
 
   public async init(): Promise<void> {
@@ -83,7 +83,7 @@ class PineappleBrowserMain {
     if (isDev && process.env.VITE_DEV_SERVER_URL) {
       this.mainWindow.loadURL(process.env.VITE_DEV_SERVER_URL);
     } else {
-      this.mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
+        this.mainWindow.loadFile(path.join(__dirname, '../../renderer/index.html'));
     }
 
     this.mainWindow.on('resize', () => {
@@ -102,11 +102,21 @@ class PineappleBrowserMain {
     const tabView = this.tabs.get(this.activeTabId);
     if (!tabView) return;
 
+    if (this.currentBounds.width <= 0 || this.currentBounds.height <= 0) {
+      this.mainWindow.removeBrowserView(tabView.view);
+      return;
+    }
+
+    const views = this.mainWindow.getBrowserViews();
+    if (!views.includes(tabView.view)) {
+      this.mainWindow.addBrowserView(tabView.view);
+    }
+
     tabView.view.setBounds({
       x: Math.max(0, this.currentBounds.x),
       y: Math.max(0, this.currentBounds.y),
-      width: Math.max(100, this.currentBounds.width),
-      height: Math.max(100, this.currentBounds.height),
+      width: Math.max(1, this.currentBounds.width),
+      height: Math.max(1, this.currentBounds.height),
     });
   }
 
@@ -188,11 +198,13 @@ class PineappleBrowserMain {
     if (!this.tabs.has(id)) return;
     const tabView = this.tabs.get(id)!;
 
-    if (this.mainWindow && this.activeTabId === id) {
+    if (this.mainWindow) {
       this.mainWindow.removeBrowserView(tabView.view);
     }
 
-    (tabView.view.webContents as any).destroy?.();
+    if (!tabView.view.webContents.isDestroyed()) {
+      (tabView.view.webContents as any).destroy?.();
+    }
     this.tabs.delete(id);
 
     const tabIds = Array.from(this.tabs.keys());

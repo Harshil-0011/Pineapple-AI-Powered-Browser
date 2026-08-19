@@ -289,16 +289,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
           <div className="flex flex-col gap-1">
             {bookmarks.map((bm) => (
-              <a
+              <div
                 key={bm.id}
-                href={bm.url}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center justify-between p-2 rounded-lg bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-subtle)] hover:border-[var(--browser-border)] text-xs text-[var(--browser-text-primary)] truncate transition-colors"
+                onClick={() => onSelectTab ? onSelectTab(bm.url) : window.location.href = bm.url}
+                className="flex items-center justify-between p-2 rounded-lg bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-subtle)] hover:border-[var(--browser-border)] text-xs text-[var(--browser-text-primary)] cursor-pointer truncate transition-colors"
               >
                 <span className="truncate">{bm.title}</span>
                 <ExternalLink size={12} className="text-[var(--browser-text-muted)]" />
-              </a>
+              </div>
             ))}
           </div>
         </div>

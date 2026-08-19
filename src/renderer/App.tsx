@@ -8,6 +8,7 @@ import { BookmarksBar } from './components/BookmarksBar';
 import { DownloadsDrawer } from './components/DownloadsDrawer';
 import { HistoryView } from './components/HistoryView';
 import { SettingsView } from './components/SettingsView';
+import { NewTabPage } from './components/NewTabPage';
 import { CommandPalette } from './components/CommandPalette';
 import { ArtifactViewer } from './components/ArtifactViewer';
 import { agentService } from './agent-service';
@@ -263,7 +264,7 @@ export const App: React.FC = () => {
         />
         <BookmarksBar bookmarks={bookmarks} onNavigate={handleNavigate} />
 
-        {/* Viewport Content Area / Settings Page / History View */}
+        {/* Viewport Content Area / Settings Page / History View / New Tab Page */}
         {activeRailTab === 'settings' ? (
           <SettingsView
             currentTheme={themeMode}
@@ -274,6 +275,12 @@ export const App: React.FC = () => {
             history={history}
             onNavigate={handleNavigate}
             onClearHistory={() => setHistory([])}
+          />
+        ) : activeTab && activeTab.url === 'about:blank' ? (
+          <NewTabPage
+            bookmarks={bookmarks}
+            onNavigate={handleNavigate}
+            onSendAIPrompt={handleSendMessage}
           />
         ) : (
           <div ref={viewportRef} className="flex-1 bg-[var(--browser-canvas-deep)] relative" />
