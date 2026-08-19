@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bookmark } from '../../shared/types';
+import { Bookmark } from '../../../shared/types';
 import { Bookmark as BookmarkIcon } from 'lucide-react';
 
 interface BookmarksBarProps {

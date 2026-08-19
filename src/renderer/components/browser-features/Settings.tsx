@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Sliders, Moon, Sun, Shield, Zap } from 'lucide-react';
 
-interface SettingsViewProps {
+interface SettingsProps {
   currentTheme?: 'dark' | 'light';
   onToggleTheme?: () => void;
 }
 
-export const SettingsView: React.FC<SettingsViewProps> = ({
+export const Settings: React.FC<SettingsProps> = ({
   currentTheme = 'dark',
   onToggleTheme,
 }) => {
@@ -15,10 +15,9 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       <div className="max-w-2xl mx-auto flex flex-col gap-6">
         <div className="flex items-center gap-3 border-b border-[var(--browser-border-subtle)] pb-4">
           <Sliders size={24} className="text-[var(--browser-accent)]" />
-          <h1 className="text-xl font-bold">Browser Preferences</h1>
+          <h1 className="text-xl font-bold font-[var(--font-display)]">Browser Preferences</h1>
         </div>
 
-        {/* Theme Settings */}
         <div className="p-4 rounded-xl bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-subtle)] flex items-center justify-between">
           <div className="flex flex-col gap-1">
             <span className="text-xs font-semibold">Theme Mode</span>
@@ -35,7 +34,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           </button>
         </div>
 
-        {/* Privacy Shield */}
         <div className="p-4 rounded-xl bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-subtle)] flex items-center justify-between">
           <div className="flex flex-col gap-1">
             <span className="text-xs font-semibold">Ad & Tracker Protection</span>
@@ -46,7 +44,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           <Shield size={18} className="text-[var(--browser-success)]" />
         </div>
 
-        {/* Memory Saver */}
         <div className="p-4 rounded-xl bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-subtle)] flex items-center justify-between">
           <div className="flex flex-col gap-1">
             <span className="text-xs font-semibold">Automated Tab Sleep</span>

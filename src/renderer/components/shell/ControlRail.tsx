@@ -6,7 +6,6 @@ export type RailTab = 'workspaces' | 'ai' | 'bookmarks' | 'history' | 'downloads
 interface ControlRailProps {
   activeTab: RailTab;
   onTabSelect: (tab: RailTab) => void;
-  activeWorkspaceName?: string;
   onNewTab?: () => void;
 }
 
@@ -25,7 +24,6 @@ export const ControlRail: React.FC<ControlRailProps> = ({
 
   return (
     <aside className="w-[52px] h-full flex flex-col items-center justify-between py-3 bg-[var(--browser-surface)] border-r border-[var(--browser-border-subtle)] z-[var(--z-sidebar)] shrink-0 select-none">
-      {/* Top Branding Anchor */}
       <div className="flex flex-col items-center gap-4">
         <button
           onClick={() => onTabSelect('workspaces')}
@@ -37,7 +35,6 @@ export const ControlRail: React.FC<ControlRailProps> = ({
 
         <div className="w-6 h-[1px] bg-[var(--browser-border-subtle)]" />
 
-        {/* Spatial Rail Items */}
         <div className="flex flex-col items-center gap-2">
           {navItems.map((item) => {
             const isActive = activeTab === item.id;
@@ -62,7 +59,6 @@ export const ControlRail: React.FC<ControlRailProps> = ({
         </div>
       </div>
 
-      {/* Bottom Controls */}
       <div className="flex flex-col items-center gap-2">
         {onNewTab && (
           <button

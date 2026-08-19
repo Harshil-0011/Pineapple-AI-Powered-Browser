@@ -1,20 +1,14 @@
 import React, { useState } from 'react';
+import { HistoryItem } from '../../../shared/types';
 import { Clock, Search, Trash2, Globe, ExternalLink } from 'lucide-react';
-import { HistoryItem as SharedHistoryItem } from '../../shared/types';
 
-export type HistoryItem = SharedHistoryItem;
-
-interface HistoryViewProps {
+interface HistoryProps {
   history: HistoryItem[];
   onNavigate: (url: string) => void;
   onClearHistory: () => void;
 }
 
-export const HistoryView: React.FC<HistoryViewProps> = ({
-  history,
-  onNavigate,
-  onClearHistory,
-}) => {
+export const History: React.FC<HistoryProps> = ({ history, onNavigate, onClearHistory }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredHistory = history.filter(
@@ -26,7 +20,6 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
   return (
     <div className="w-full h-full bg-[var(--browser-canvas-deep)] text-[var(--browser-text-primary)] p-8 overflow-y-auto select-none">
       <div className="max-w-3xl mx-auto flex flex-col gap-6">
-        {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-[var(--browser-border-subtle)]">
           <div className="flex items-center gap-3">
             <Clock size={24} className="text-[var(--browser-warning)]" />
@@ -40,7 +33,6 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
           </button>
         </div>
 
-        {/* Search Bar */}
         <div className="flex items-center bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-subtle)] rounded-full px-4 py-2.5">
           <Search size={16} className="text-[var(--browser-text-muted)] mr-2.5 shrink-0" />
           <input
@@ -52,7 +44,6 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
           />
         </div>
 
-        {/* History Item List */}
         <div className="flex flex-col gap-2">
           {filteredHistory.length === 0 ? (
             <div className="text-center py-12 text-[var(--browser-text-muted)] text-xs">

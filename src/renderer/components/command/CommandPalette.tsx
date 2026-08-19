@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Tab, Bookmark } from '../../shared/types';
-import { Search, Layers, Bookmark as BookmarkIcon, Sparkles, Command } from 'lucide-react';
+import { Tab, Bookmark } from '../../../shared/types';
+import { Search, Sparkles } from 'lucide-react';
+import { CommandResult } from './CommandResult';
 
 interface CommandPaletteProps {
   isOpen: boolean;
@@ -34,13 +35,12 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 bg-[rgba(8,10,13,0.7)] backdrop-blur-md z-[var(--z-modal)] flex items-start justify-center pt-24 p-4 animate-fade-in select-none"
+      className="fixed inset-0 glass-overlay z-[var(--z-modal)] flex items-start justify-center pt-24 p-4 animate-fade-in select-none"
     >
       <div
         onClick={(e) => e.stopPropagation()}
         className="w-full max-w-xl glass-strong rounded-2xl p-4 flex flex-col gap-3 shadow-2xl border border-[var(--browser-border-strong)]"
       >
-        {/* Input */}
         <div className="flex items-center gap-2 px-3 py-2 rounded-full bg-[var(--browser-surface-secondary)] border border-[var(--browser-border)]">
           <Search size={16} className="text-[var(--browser-accent)] shrink-0" />
           <input
@@ -56,9 +56,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
           </span>
         </div>
 
-        {/* Results Stream */}
         <div className="max-h-80 overflow-y-auto flex flex-col gap-2">
-          {/* AI Execution Option */}
           {query.trim() && (
             <div
               onClick={() => {
@@ -77,7 +75,6 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
             </div>
           )}
 
-          {/* Open Tabs Group */}
           <div className="flex flex-col gap-1">
             <span className="text-[10px] font-semibold text-[var(--browser-text-muted)] tracking-wider uppercase px-1">
               Open Tabs
@@ -85,21 +82,18 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
             {tabs
               .filter((t) => t.title?.toLowerCase().includes(query.toLowerCase()))
               .map((tab) => (
-                <div
+                <CommandResult
                   key={tab.id}
+                  type="tab"
+                  title={tab.title || tab.url}
                   onClick={() => {
                     onSwitchTab(tab.id);
                     onClose();
                   }}
-                  className="p-2 rounded-lg hover:bg-[var(--browser-surface-hover)] flex items-center gap-2 text-xs text-[var(--browser-text-primary)] cursor-pointer"
-                >
-                  <Layers size={14} className="text-[var(--browser-accent)]" />
-                  <span className="truncate">{tab.title || tab.url}</span>
-                </div>
+                />
               ))}
           </div>
 
-          {/* Bookmarks Group */}
           <div className="flex flex-col gap-1">
             <span className="text-[10px] font-semibold text-[var(--browser-text-muted)] tracking-wider uppercase px-1">
               Bookmarks
@@ -107,17 +101,15 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
             {bookmarks
               .filter((b) => b.title?.toLowerCase().includes(query.toLowerCase()))
               .map((bm) => (
-                <div
+                <CommandResult
                   key={bm.id}
+                  type="bookmark"
+                  title={bm.title}
                   onClick={() => {
                     onNavigate(bm.url);
                     onClose();
                   }}
-                  className="p-2 rounded-lg hover:bg-[var(--browser-surface-hover)] flex items-center gap-2 text-xs text-[var(--browser-text-primary)] cursor-pointer"
-                >
-                  <BookmarkIcon size={14} className="text-[var(--browser-accent-purple)]" />
-                  <span className="truncate">{bm.title}</span>
-                </div>
+                />
               ))}
           </div>
         </div>

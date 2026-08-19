@@ -1,17 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Tab, PagePerception, ChatMessage, Bookmark, DownloadItem, HistoryItem } from '../shared/types';
-import { ControlRail, RailTab } from './components/ControlRail';
-import { Sidebar } from './components/Sidebar';
-import { TabBar } from './components/TabBar';
-import { AddressBar } from './components/AddressBar';
-import { BookmarksBar } from './components/BookmarksBar';
-import { DownloadsDrawer } from './components/DownloadsDrawer';
-import { HistoryView } from './components/HistoryView';
-import { SettingsView } from './components/SettingsView';
-import { NewTabPage } from './components/NewTabPage';
-import { CommandPalette } from './components/CommandPalette';
-import { ArtifactViewer } from './components/ArtifactViewer';
+import { Tab as TabType, PagePerception, ChatMessage, Bookmark, DownloadItem, HistoryItem } from '../shared/types';
+import { BrowserShell } from './components/shell/BrowserShell';
+import { MainShell } from './components/shell/MainShell';
+import { BrowserViewport } from './components/shell/BrowserViewport';
+import { ControlRail, RailTab } from './components/shell/ControlRail';
+import { ContextSidebar } from './components/shell/ContextSidebar';
+import { TabBar } from './components/chrome/TabBar';
+import { BrowserToolbar } from './components/chrome/BrowserToolbar';
+import { BookmarksBar } from './components/chrome/BookmarksBar';
+import { WorkspaceSwitcher } from './components/workspace/WorkspaceSwitcher';
+import { AIPanel } from './components/ai/AIPanel';
+import { Bookmarks } from './components/browser-features/Bookmarks';
+import { History } from './components/browser-features/History';
+import { Downloads } from './components/browser-features/Downloads';
+import { Settings } from './components/browser-features/Settings';
+import { CommandPalette } from './components/command/CommandPalette';
+import { ArtifactViewer } from './components/command/ArtifactViewer';
 import { agentService } from './agent-service';
+import { Plus, X } from 'lucide-react';
 import './styles.css';
 
 export const App: React.FC = () => {
@@ -19,7 +25,7 @@ export const App: React.FC = () => {
   const [activeWorkspaceName, setActiveWorkspaceName] = useState<string>('Personal');
   const [themeMode, setThemeMode] = useState<'dark' | 'light'>('dark');
 
-  const [tabs, setTabs] = useState<Tab[]>([]);
+  const [tabs, setTabs] = useState<TabType[]>([]);
   const [activeTabId, setActiveTabId] = useState<string>('');
   const [perception, setPerception] = useState<PagePerception | null>(null);
   const [isVerticalTabs, setIsVerticalTabs] = useState<boolean>(false);
@@ -30,7 +36,7 @@ export const App: React.FC = () => {
 
   const viewportRef = useRef<HTMLDivElement>(null);
 
-  const [downloads, setDownloads] = useState<DownloadItem[]>([
+  const [downloads] = useState<DownloadItem[]>([
     { id: '1', filename: 'pineapple-workspace-export.pdf', url: 'https://example.com/export.pdf', progress: 100, state: 'completed', totalBytes: 2048000, receivedBytes: 2048000 },
   ]);
 
@@ -39,7 +45,7 @@ export const App: React.FC = () => {
     { id: 'h2', title: 'GitHub Workspace', url: 'https://github.com', visitedAt: Date.now() - 1800000 },
   ]);
 
-  const [bookmarks, setBookmarks] = useState<Bookmark[]>([
+  const [bookmarks] = useState<Bookmark[]>([
     { id: '1', title: 'Google Search', url: 'https://www.google.com' },
     { id: '2', title: 'GitHub Dashboard', url: 'https://github.com' },
     { id: '3', title: 'Hacker News', url: 'https://news.ycombinator.com' },
@@ -54,7 +60,7 @@ export const App: React.FC = () => {
     },
   ]);
 
-  // Layout-owned geometry synchronization with Electron Main Process
+  // Dynamic layout geometry synchronization with Electron Main Process
   useEffect(() => {
     const syncViewport = () => {
       if (viewportRef.current && (window as any).pineapple?.updateViewportBounds) {
@@ -93,12 +99,12 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     if ((window as any).pineapple) {
-      const unsubChanged = (window as any).pineapple.onTabsChanged((updatedTabs: Tab[], newActiveId: string) => {
+      const unsubChanged = (window as any).pineapple.onTabsChanged((updatedTabs: TabType[], newActiveId: string) => {
         setTabs(updatedTabs);
         setActiveTabId(newActiveId);
       });
 
-      const unsubUpdated = (window as any).pineapple.onTabUpdated((updatedTab: Tab) => {
+      const unsubUpdated = (window as any).pineapple.onTabUpdated((updatedTab: TabType) => {
         setTabs((prev) => prev.map((t) => (t.id === updatedTab.id ? updatedTab : t)));
         if (updatedTab.title && updatedTab.url && updatedTab.url !== 'about:blank') {
           setHistory((prev) => [
@@ -194,54 +200,115 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div
-      data-theme={themeMode}
-      className="flex w-screen h-screen overflow-hidden bg-[var(--browser-canvas-deep)] text-[var(--browser-text-primary)] font-[var(--font-ui)] antialiased select-none"
-    >
-      {/* LAYER 1: Control Rail (Persistent 52px spatial anchor) */}
+    <BrowserShell theme={themeMode}>
+      {/* LAYER 1: Control Rail */}
       <ControlRail
         activeTab={activeRailTab}
-        onTabSelect={(tab) => setActiveRailTab(tab)}
-        activeWorkspaceName={activeWorkspaceName}
+        onTabSelect={(tab: RailTab) => setActiveRailTab(tab)}
         onNewTab={handleCreateTab}
       />
 
-      {/* LAYER 2: Context Sidebar (Resizable 280px drawer surface) */}
-      <Sidebar
-        activeRailTab={activeRailTab}
-        messages={messages}
-        onSendMessage={handleSendMessage}
-        perception={perception}
-        onRefreshPerception={handleRefreshPerception}
-        onOpenArtifact={() => setShowArtifactViewer(true)}
-        tabs={tabs}
-        activeTabId={activeTabId}
-        onSelectTab={handleSwitchTab}
-        onCloseTab={handleCloseTab}
-        onNewTab={handleCreateTab}
-        activeWorkspaceName={activeWorkspaceName}
-        onSwitchWorkspace={(ws) => setActiveWorkspaceName(ws)}
-        bookmarks={bookmarks}
-        history={history}
-        downloads={downloads}
-        onClearHistory={() => setHistory([])}
-      />
+      {/* LAYER 2: Context Sidebar */}
+      <ContextSidebar activeRailTab={activeRailTab}>
+        {activeRailTab === 'workspaces' && (
+          <div className="flex-1 flex flex-col h-full p-3 gap-3 overflow-y-auto">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-semibold text-[var(--browser-text-muted)] tracking-wider uppercase">
+                Workspace
+              </span>
+              <button
+                onClick={handleCreateTab}
+                className="p-1 rounded-md text-[var(--browser-text-secondary)] hover:text-[var(--browser-text-primary)] hover:bg-[var(--browser-surface-hover)]"
+              >
+                <Plus size={14} />
+              </button>
+            </div>
 
-      {/* Vertical Tab Strip Option */}
-      {isVerticalTabs && (
-        <TabBar
-          tabs={tabs}
-          activeTabId={activeTabId}
-          isVertical={true}
-          onSwitchTab={handleSwitchTab}
-          onCloseTab={handleCloseTab}
-          onCreateTab={handleCreateTab}
-          onToggleVertical={() => setIsVerticalTabs(false)}
-        />
-      )}
+            <WorkspaceSwitcher
+              workspaces={['Personal', 'Work', 'Research', 'Development']}
+              activeWorkspace={activeWorkspaceName}
+              onSwitch={(ws: string) => setActiveWorkspaceName(ws)}
+            />
 
-      {/* LAYER 3: Content Canvas (Web Viewport Chrome) */}
-      <div className="flex-1 flex flex-col h-full relative overflow-hidden bg-[var(--browser-canvas-deep)]">
+            <div className="flex items-center justify-between mt-2">
+              <span className="text-[11px] font-semibold text-[var(--browser-text-muted)] tracking-wider uppercase">
+                Open Tabs ({tabs.length})
+              </span>
+              <button
+                onClick={handleCreateTab}
+                className="text-[11px] text-[var(--browser-accent)] hover:underline flex items-center gap-1"
+              >
+                <Plus size={12} /> New Tab
+              </button>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              {tabs.map((tab) => {
+                const isActive = tab.id === activeTabId;
+                return (
+                  <div
+                    key={tab.id}
+                    onClick={() => handleSwitchTab(tab.id)}
+                    className={`group relative flex items-center justify-between p-2 rounded-lg cursor-pointer transition-all border ${
+                      isActive
+                        ? 'bg-[var(--browser-surface-selected)] border-[var(--browser-accent-border)] text-[var(--browser-text-primary)]'
+                        : 'bg-transparent border-transparent text-[var(--browser-text-secondary)] hover:bg-[var(--browser-surface-hover)] hover:text-[var(--browser-text-primary)]'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2 overflow-hidden flex-1">
+                      <span className="w-2 h-2 rounded-full bg-[var(--browser-accent)] opacity-60" />
+                      <span className="text-xs truncate font-medium">
+                        {tab.title || tab.url}
+                      </span>
+                    </div>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleCloseTab(tab.id);
+                      }}
+                      className="opacity-0 group-hover:opacity-100 p-1 text-[var(--browser-text-muted)] hover:text-[var(--browser-danger)] rounded-md transition-opacity"
+                    >
+                      <X size={12} />
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {activeRailTab === 'ai' && (
+          <AIPanel
+            messages={messages}
+            onSendMessage={handleSendMessage}
+            perception={perception}
+            onRefreshPerception={handleRefreshPerception}
+            onOpenArtifact={() => setShowArtifactViewer(true)}
+          />
+        )}
+
+        {activeRailTab === 'bookmarks' && (
+          <Bookmarks bookmarks={bookmarks} onNavigate={handleNavigate} />
+        )}
+
+        {activeRailTab === 'history' && (
+          <History history={history} onNavigate={handleNavigate} onClearHistory={() => setHistory([])} />
+        )}
+
+        {activeRailTab === 'downloads' && (
+          <Downloads downloads={downloads} />
+        )}
+
+        {activeRailTab === 'settings' && (
+          <Settings
+            currentTheme={themeMode}
+            onToggleTheme={() => setThemeMode(themeMode === 'dark' ? 'light' : 'dark')}
+          />
+        )}
+      </ContextSidebar>
+
+      {/* LAYER 3: Main Shell */}
+      <MainShell>
         {!isVerticalTabs && (
           <TabBar
             tabs={tabs}
@@ -253,7 +320,8 @@ export const App: React.FC = () => {
             onToggleVertical={() => setIsVerticalTabs(true)}
           />
         )}
-        <AddressBar
+
+        <BrowserToolbar
           activeTab={activeTab}
           onNavigate={handleNavigate}
           onGoBack={handleGoBack}
@@ -262,31 +330,24 @@ export const App: React.FC = () => {
           onToggleDownloads={() => setShowDownloads(!showDownloads)}
           onToggleHistory={() => setShowHistoryView(!showHistoryView)}
         />
+
         <BookmarksBar bookmarks={bookmarks} onNavigate={handleNavigate} />
 
-        {/* Viewport Content Area / Settings Page / History View / New Tab Page */}
         {activeRailTab === 'settings' ? (
-          <SettingsView
+          <Settings
             currentTheme={themeMode}
             onToggleTheme={() => setThemeMode(themeMode === 'dark' ? 'light' : 'dark')}
           />
         ) : showHistoryView ? (
-          <HistoryView
+          <History
             history={history}
             onNavigate={handleNavigate}
             onClearHistory={() => setHistory([])}
           />
-        ) : activeTab && activeTab.url === 'about:blank' ? (
-          <NewTabPage
-            bookmarks={bookmarks}
-            onNavigate={handleNavigate}
-            onSendAIPrompt={handleSendMessage}
-          />
         ) : (
-          <div ref={viewportRef} className="flex-1 bg-[var(--browser-canvas-deep)] relative" />
+          <BrowserViewport ref={viewportRef} />
         )}
 
-        {/* Command Palette Overlay (Cmd+K) */}
         <CommandPalette
           isOpen={showCommandPalette}
           onClose={() => setShowCommandPalette(false)}
@@ -297,7 +358,6 @@ export const App: React.FC = () => {
           onSendAIPrompt={handleSendMessage}
         />
 
-        {/* Visual Artifact Drawer */}
         <ArtifactViewer
           isOpen={showArtifactViewer}
           onClose={() => setShowArtifactViewer(false)}
@@ -306,15 +366,13 @@ export const App: React.FC = () => {
           data={{ summary: 'Synthesized pricing structures across top software competitors.' }}
         />
 
-        {/* Downloads Modal Drawer */}
         {showDownloads && (
-          <DownloadsDrawer
-            downloads={downloads}
-            onClose={() => setShowDownloads(false)}
-          />
+          <div className="absolute bottom-0 right-0 z-[var(--z-floating)]">
+            <Downloads downloads={downloads} onClose={() => setShowDownloads(false)} />
+          </div>
         )}
-      </div>
-    </div>
+      </MainShell>
+    </BrowserShell>
   );
 };
 
