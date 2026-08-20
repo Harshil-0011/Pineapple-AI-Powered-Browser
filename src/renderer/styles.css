@@ -4,8 +4,8 @@
   /* =========================
      SURFACES (Section 3)
      ========================= */
-  --browser-canvas-deep: #080A0D;
-  --browser-canvas: #0B0D10;
+  --browser-canvas-deep: #050709;
+  --browser-canvas: #0A0D12;
   --browser-surface: #111418;
   --browser-surface-secondary: #15191E;
   --browser-surface-elevated: #1B2026;
@@ -13,7 +13,7 @@
   --browser-surface-hover: rgba(255, 255, 255, 0.045);
   --browser-surface-selected: rgba(6, 182, 212, 0.12);
 
-  /* Legacy aliases for backwards compatibility */
+  /* Legacy aliases */
   --bg-obsidian: var(--browser-canvas);
   --bg-panel: var(--browser-surface);
   --bg-card: var(--browser-surface-secondary);
@@ -33,7 +33,7 @@
   --text-muted: var(--browser-text-muted);
 
   /* =========================
-     ACCENTS (Section 3) - Dark Obsidian + Cyan Accent (#06b6d4)
+     ACCENTS (Section 3) - Dark Obsidian + Electric Cyan Accent (#06B6D4)
      ========================= */
   --browser-accent: #06B6D4;
   --browser-accent-cyan: #06B6D4;
@@ -67,7 +67,7 @@
   --glass-subtle: rgba(17, 20, 24, 0.58);
   --glass-elevated: rgba(21, 25, 30, 0.68);
   --glass-strong: rgba(27, 32, 38, 0.76);
-  --glass-overlay: rgba(8, 10, 13, 0.82);
+  --glass-overlay: rgba(5, 7, 9, 0.82);
 
   --glass-blur-subtle: 12px;
   --glass-blur-elevated: 20px;
@@ -82,8 +82,7 @@
   --radius-md: 8px;
   --radius-lg: 10px;
   --radius-xl: 12px;
-  --radius-2xl: 14px;
-  --radius-floating: 16px;
+  --radius-2xl: 16px;
   --radius-capsule: 999px;
 
   /* =========================
@@ -110,9 +109,9 @@
   /* =========================
      TYPOGRAPHY (Section 33)
      ========================= */
-  --font-ui: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-ui: "Inter", system-ui, -apple-system, sans-serif;
   --font-display: "Space Grotesk", system-ui, -apple-system, sans-serif;
-  --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+  --font-mono: "JetBrains Mono", Consolas, monospace;
 
   /* =========================
      MOTION (Section 3 & 38)
@@ -124,8 +123,6 @@
   --motion-micro: 120ms var(--ease-standard);
   --motion-standard: 200ms var(--ease-standard);
   --motion-panel: 260ms var(--ease-standard);
-  --motion-navigation: 320ms var(--ease-standard);
-  --motion-expressive: 600ms var(--ease-standard);
 
   /* =========================
      Z-INDEX (Section 3)
@@ -137,7 +134,6 @@
   --z-popover: 500;
   --z-overlay: 600;
   --z-modal: 700;
-  --z-toast: 9000;
 }
 
 /* =========================
@@ -197,7 +193,7 @@ body, html, #root {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Custom Scrollbars (Section 43) */
+/* Custom Scrollbars */
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
@@ -213,7 +209,6 @@ body, html, #root {
   background: var(--browser-surface-active);
 }
 
-/* Hide scrollbar utility */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -222,9 +217,7 @@ body, html, #root {
   scrollbar-width: none;
 }
 
-/* =========================
-   GLASSMORPHISM UTILITIES (Section 5)
-   ========================= */
+/* Glassmorphism Utilities */
 .glass-subtle {
   background: var(--glass-subtle);
   backdrop-filter: blur(var(--glass-blur-subtle)) saturate(125%);
@@ -254,9 +247,7 @@ body, html, #root {
   -webkit-backdrop-filter: blur(var(--glass-blur-overlay)) saturate(145%);
 }
 
-/* =========================
-   CAPSULE CONTROL SYSTEM (Section 6)
-   ========================= */
+/* Capsule Control System */
 .capsule {
   border-radius: var(--radius-capsule);
   background: var(--browser-surface-hover);
@@ -279,9 +270,7 @@ body, html, #root {
   outline-offset: 2px;
 }
 
-/* =========================
-   KEYFRAME ANIMATIONS
-   ========================= */
+/* Keyframes */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -312,7 +301,6 @@ body, html, #root {
   animation: slideInFromLeft var(--motion-panel) forwards;
 }
 
-/* Reduced transparency support (Section 46) */
 @media (prefers-reduced-transparency: reduce) {
   .glass-subtle, .glass-elevated, .glass-strong, .glass-overlay {
     backdrop-filter: none !important;
@@ -321,7 +309,6 @@ body, html, #root {
   }
 }
 
-/* Reduced motion support (Section 45) */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;
