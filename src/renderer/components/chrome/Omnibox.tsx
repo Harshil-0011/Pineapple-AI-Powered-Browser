@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Lock, Search, Star, Sparkles, Globe, Clock, Bookmark as BookmarkIcon, Terminal, ArrowRight } from 'lucide-react';
+import { Lock, Search, Star, Sparkles, Globe, Clock, Bookmark as BookmarkIcon, ArrowRight } from 'lucide-react';
 import { Tab as TabType, Bookmark as BookmarkType, HistoryItem } from '../../../shared/types';
 
 interface OmniboxProps {
@@ -24,14 +24,12 @@ export const Omnibox: React.FC<OmniboxProps> = ({
   const [inputUrl, setInputUrl] = useState(url);
   const [isFocused, setIsFocused] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(-1);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setInputUrl(url);
   }, [url]);
 
-  // Handle outside click to close suggestions
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
@@ -44,7 +42,6 @@ export const Omnibox: React.FC<OmniboxProps> = ({
 
   const trimmedQuery = inputUrl.trim().toLowerCase();
 
-  // Filtered suggestions by intent
   const matchingTabs = tabs.filter(
     (t) => t.title?.toLowerCase().includes(trimmedQuery) || t.url.toLowerCase().includes(trimmedQuery)
   ).slice(0, 3);
@@ -81,7 +78,7 @@ export const Omnibox: React.FC<OmniboxProps> = ({
         onSubmit={handleSubmit}
         className={`w-full h-10 px-3.5 rounded-full glass-subtle bg-[var(--browser-surface-secondary)] border transition-all flex items-center gap-2.5 ${
           isFocused
-            ? 'border-[var(--browser-cyan-border)] bg-[var(--browser-surface-elevated)] ring-2 ring-[rgba(6,182,212,0.18)] shadow-lg'
+            ? 'border-[var(--browser-accent-border)] bg-[var(--browser-surface-elevated)] ring-1 ring-[var(--browser-accent-border)] shadow-md'
             : 'border-[var(--browser-border)] hover:border-[var(--browser-border-strong)]'
         }`}
       >
@@ -90,7 +87,7 @@ export const Omnibox: React.FC<OmniboxProps> = ({
           <Lock size={13} />
         </div>
 
-        {/* Search / AI Icon */}
+        {/* Search Icon */}
         <Search size={14} className="text-[var(--browser-text-muted)] shrink-0" />
 
         {/* Omnibox Text Input */}
@@ -111,7 +108,7 @@ export const Omnibox: React.FC<OmniboxProps> = ({
           title={isBookmarked ? 'Bookmarked' : 'Bookmark Page'}
           className={`p-1 rounded-full transition-colors ${
             isBookmarked
-              ? 'text-[var(--browser-accent-cyan)] bg-[rgba(6,182,212,0.15)]'
+              ? 'text-[var(--browser-accent)] bg-amber-500/10'
               : 'text-[var(--browser-text-muted)] hover:text-[var(--browser-text-primary)]'
           }`}
         >
@@ -119,9 +116,9 @@ export const Omnibox: React.FC<OmniboxProps> = ({
         </button>
       </form>
 
-      {/* Interactive Dropdown Suggestions (Section 15) */}
+      {/* Interactive Dropdown Suggestions */}
       {showSuggestions && (
-        <div className="absolute top-12 left-0 right-0 glass-strong rounded-2xl p-3 border border-[var(--browser-cyan-border)] shadow-2xl flex flex-col gap-2 animate-fade-in z-[var(--z-popover)]">
+        <div className="absolute top-12 left-0 right-0 glass-strong rounded-2xl p-3 border border-[var(--browser-accent-border)] shadow-xl flex flex-col gap-2 animate-fade-in z-[var(--z-popover)]">
           {/* AI Search Suggestion */}
           {trimmedQuery && (
             <div
@@ -129,13 +126,13 @@ export const Omnibox: React.FC<OmniboxProps> = ({
                 setIsFocused(false);
                 if (onSendAIPrompt) onSendAIPrompt(inputUrl);
               }}
-              className="p-2.5 rounded-xl bg-[var(--browser-surface-selected)] border border-[var(--browser-cyan-border)] flex items-center justify-between cursor-pointer hover:bg-[rgba(6,182,212,0.15)] transition-colors"
+              className="p-2.5 rounded-xl bg-[var(--browser-surface-selected)] border border-[var(--browser-accent-border)] flex items-center justify-between cursor-pointer hover:bg-[var(--browser-surface-elevated)] transition-colors"
             >
               <div className="flex items-center gap-2 text-xs font-medium text-[var(--browser-text-primary)]">
-                <Sparkles size={14} className="text-[var(--browser-accent-cyan)]" />
+                <Sparkles size={14} className="text-[var(--browser-accent)]" />
                 <span>Ask Pineapple AI: "{inputUrl}"</span>
               </div>
-              <span className="text-[10px] text-[var(--browser-accent-cyan)] font-semibold flex items-center gap-1">
+              <span className="text-[10px] text-[var(--browser-accent)] font-semibold flex items-center gap-1">
                 Ask <ArrowRight size={10} />
               </span>
             </div>
@@ -157,7 +154,7 @@ export const Omnibox: React.FC<OmniboxProps> = ({
                   className="p-2 rounded-lg bg-[var(--browser-surface-hover)] hover:bg-[var(--browser-surface-active)] flex items-center justify-between text-xs cursor-pointer transition-colors"
                 >
                   <div className="flex items-center gap-2 truncate">
-                    <Globe size={13} className="text-[var(--browser-accent-cyan)] shrink-0" />
+                    <Globe size={13} className="text-[var(--browser-accent)] shrink-0" />
                     <span className="truncate font-medium text-[var(--browser-text-primary)]">
                       {tab.title || tab.url}
                     </span>
@@ -213,7 +210,7 @@ export const Omnibox: React.FC<OmniboxProps> = ({
                   className="p-2 rounded-lg bg-transparent hover:bg-[var(--browser-surface-hover)] flex items-center justify-between text-xs cursor-pointer transition-colors"
                 >
                   <div className="flex items-center gap-2 truncate">
-                    <BookmarkIcon size={13} className="text-[var(--browser-accent-cyan)] shrink-0" />
+                    <BookmarkIcon size={13} className="text-[var(--browser-accent)] shrink-0" />
                     <span className="truncate text-[var(--browser-text-primary)]">{bm.title}</span>
                   </div>
                   <span className="text-[10px] text-[var(--browser-text-muted)] truncate max-w-[140px]">

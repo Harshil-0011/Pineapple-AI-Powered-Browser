@@ -2,16 +2,16 @@
 
 :root {
   /* =========================
-     SURFACES (Section 3)
+     SURFACES — Flat Matte Charcoal Slate
      ========================= */
-  --browser-canvas-deep: #050709;
-  --browser-canvas: #0A0D12;
-  --browser-surface: #111418;
-  --browser-surface-secondary: #15191E;
-  --browser-surface-elevated: #1B2026;
-  --browser-surface-active: #222830;
+  --browser-canvas-deep: #090B0F;
+  --browser-canvas: #0E1117;
+  --browser-surface: #141822;
+  --browser-surface-secondary: #1A1F2C;
+  --browser-surface-elevated: #212736;
+  --browser-surface-active: #293042;
   --browser-surface-hover: rgba(255, 255, 255, 0.045);
-  --browser-surface-selected: rgba(6, 182, 212, 0.12);
+  --browser-surface-selected: rgba(217, 119, 6, 0.12);
 
   /* Legacy aliases */
   --bg-obsidian: var(--browser-canvas);
@@ -20,12 +20,12 @@
   --bg-hover: var(--browser-surface-elevated);
 
   /* =========================
-     TEXT (Section 3)
+     TEXT
      ========================= */
-  --browser-text-primary: #F2F4F7;
-  --browser-text-secondary: #A5ACB8;
-  --browser-text-muted: #707783;
-  --browser-text-disabled: #555C66;
+  --browser-text-primary: #F1F5F9;
+  --browser-text-secondary: #94A3B8;
+  --browser-text-muted: #64748B;
+  --browser-text-disabled: #475569;
 
   /* Legacy aliases */
   --text-primary: var(--browser-text-primary);
@@ -33,49 +33,49 @@
   --text-muted: var(--browser-text-muted);
 
   /* =========================
-     ACCENTS (Section 3) - Dark Obsidian + Electric Cyan Accent (#06B6D4)
+     ACCENTS — Warm Amber (#D97706) & Emerald Green (#10B981)
      ========================= */
-  --browser-accent: #06B6D4;
-  --browser-accent-cyan: #06B6D4;
-  --browser-accent-purple: #A78BFA;
-  --browser-success: #55C98A;
-  --browser-warning: #E7B75A;
-  --browser-danger: #F06A6A;
-  --browser-info: #06B6D4;
+  --browser-accent: #D97706;
+  --browser-accent-cyan: #D97706;
+  --browser-accent-purple: #10B981;
+  --browser-success: #10B981;
+  --browser-warning: #D97706;
+  --browser-danger: #EF4444;
+  --browser-info: #3B82F6;
 
   /* Legacy aliases */
-  --accent-cyan: var(--browser-accent-cyan);
-  --accent-cyan-hover: #22d3ee;
+  --accent-cyan: var(--browser-accent);
+  --accent-cyan-hover: #f59e0b;
   --accent-blue: var(--browser-accent);
   --danger: var(--browser-danger);
   --success: var(--browser-success);
 
   /* =========================
-     BORDERS (Section 3)
+     MATTE BORDERS
      ========================= */
   --browser-border-subtle: rgba(255, 255, 255, 0.06);
   --browser-border: rgba(255, 255, 255, 0.09);
   --browser-border-strong: rgba(255, 255, 255, 0.14);
-  --browser-accent-border: rgba(6, 182, 212, 0.32);
-  --browser-cyan-border: rgba(6, 182, 212, 0.28);
-  --browser-purple-border: rgba(167, 139, 250, 0.24);
+  --browser-accent-border: rgba(217, 119, 6, 0.30);
+  --browser-cyan-border: rgba(217, 119, 6, 0.28);
+  --browser-purple-border: rgba(16, 185, 129, 0.24);
   --border-color: var(--browser-border);
 
   /* =========================
-     GLASSMORPHISM (Section 3 & 5)
+     FLAT MATTE GLASS (No Neon Blur or Glow)
      ========================= */
-  --glass-subtle: rgba(17, 20, 24, 0.58);
-  --glass-elevated: rgba(21, 25, 30, 0.68);
-  --glass-strong: rgba(27, 32, 38, 0.76);
-  --glass-overlay: rgba(5, 7, 9, 0.82);
+  --glass-subtle: rgba(20, 24, 34, 0.88);
+  --glass-elevated: rgba(26, 31, 44, 0.92);
+  --glass-strong: rgba(33, 39, 54, 0.95);
+  --glass-overlay: rgba(9, 11, 15, 0.88);
 
-  --glass-blur-subtle: 12px;
-  --glass-blur-elevated: 20px;
-  --glass-blur-strong: 28px;
-  --glass-blur-overlay: 36px;
+  --glass-blur-subtle: 10px;
+  --glass-blur-elevated: 16px;
+  --glass-blur-strong: 20px;
+  --glass-blur-overlay: 28px;
 
   /* =========================
-     RADIUS (Section 3)
+     RADIUS
      ========================= */
   --radius-xs: 4px;
   --radius-sm: 6px;
@@ -95,37 +95,31 @@
   --space-5: 20px;
   --space-6: 24px;
   --space-8: 32px;
-  --space-10: 40px;
-  --space-12: 48px;
-  --space-16: 64px;
 
   /* =========================
-     SHADOWS (Section 3 & 36)
+     SHADOWS
      ========================= */
-  --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.16);
-  --shadow-md: 0 8px 28px rgba(0, 0, 0, 0.22);
-  --shadow-lg: 0 18px 50px rgba(0, 0, 0, 0.30);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.45);
 
   /* =========================
-     TYPOGRAPHY (Section 33)
+     TYPOGRAPHY
      ========================= */
   --font-ui: "Inter", system-ui, -apple-system, sans-serif;
   --font-display: "Space Grotesk", system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", Consolas, monospace;
 
   /* =========================
-     MOTION (Section 3 & 38)
+     MOTION
      ========================= */
   --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
-
   --motion-micro: 120ms var(--ease-standard);
   --motion-standard: 200ms var(--ease-standard);
   --motion-panel: 260ms var(--ease-standard);
 
   /* =========================
-     Z-INDEX (Section 3)
+     Z-INDEX
      ========================= */
   --z-content: 0;
   --z-chrome: 100;
@@ -137,42 +131,30 @@
 }
 
 /* =========================
-   LIGHT THEME OVERRIDES (Section 4)
+   LIGHT THEME OVERRIDES
    ========================= */
 [data-theme="light"] {
-  --browser-canvas-deep: #EDEFF2;
-  --browser-canvas: #F4F5F7;
+  --browser-canvas-deep: #E2E8F0;
+  --browser-canvas: #F8FAFC;
   --browser-surface: #FFFFFF;
-  --browser-surface-secondary: #F8F9FA;
+  --browser-surface-secondary: #F1F5F9;
   --browser-surface-elevated: #FFFFFF;
-  --browser-surface-active: #EEF2F7;
+  --browser-surface-active: #E2E8F0;
 
   --browser-surface-hover: rgba(15, 23, 42, 0.035);
-  --browser-surface-selected: rgba(8, 145, 178, 0.09);
+  --browser-surface-selected: rgba(217, 119, 6, 0.09);
 
-  --browser-text-primary: #171A1F;
-  --browser-text-secondary: #59616D;
-  --browser-text-muted: #7D8590;
-  --browser-text-disabled: #A4AAB2;
+  --browser-text-primary: #0F172A;
+  --browser-text-secondary: #475569;
+  --browser-text-muted: #64748B;
+  --browser-text-disabled: #94A3B8;
 
-  --browser-accent: #0891B2;
-  --browser-accent-cyan: #0891B2;
-  --browser-accent-purple: #7254C7;
-
-  --browser-success: #258A58;
-  --browser-warning: #A36E08;
-  --browser-danger: #C83F47;
-  --browser-info: #0891B2;
+  --browser-accent: #D97706;
+  --browser-accent-cyan: #D97706;
 
   --browser-border-subtle: rgba(15, 23, 42, 0.055);
   --browser-border: rgba(15, 23, 42, 0.09);
   --browser-border-strong: rgba(15, 23, 42, 0.14);
-  --browser-accent-border: rgba(8, 145, 178, 0.28);
-
-  --glass-subtle: rgba(255, 255, 255, 0.68);
-  --glass-elevated: rgba(255, 255, 255, 0.78);
-  --glass-strong: rgba(255, 255, 255, 0.86);
-  --glass-overlay: rgba(244, 245, 247, 0.90);
 }
 
 * {
@@ -220,49 +202,49 @@ body, html, #root {
 /* Glassmorphism Utilities */
 .glass-subtle {
   background: var(--glass-subtle);
-  backdrop-filter: blur(var(--glass-blur-subtle)) saturate(125%);
-  -webkit-backdrop-filter: blur(var(--glass-blur-subtle)) saturate(125%);
+  backdrop-filter: blur(var(--glass-blur-subtle));
+  -webkit-backdrop-filter: blur(var(--glass-blur-subtle));
   border: 1px solid var(--browser-border-subtle);
 }
 
 .glass-elevated {
   background: var(--glass-elevated);
-  backdrop-filter: blur(var(--glass-blur-elevated)) saturate(135%);
-  -webkit-backdrop-filter: blur(var(--glass-blur-elevated)) saturate(135%);
+  backdrop-filter: blur(var(--glass-blur-elevated));
+  -webkit-backdrop-filter: blur(var(--glass-blur-elevated));
   border: 1px solid var(--browser-border);
   box-shadow: var(--shadow-md);
 }
 
 .glass-strong {
   background: var(--glass-strong);
-  backdrop-filter: blur(var(--glass-blur-strong)) saturate(145%);
-  -webkit-backdrop-filter: blur(var(--glass-blur-strong)) saturate(145%);
+  backdrop-filter: blur(var(--glass-blur-strong));
+  -webkit-backdrop-filter: blur(var(--glass-blur-strong));
   border: 1px solid var(--browser-border-strong);
   box-shadow: var(--shadow-lg);
 }
 
 .glass-overlay {
   background: var(--glass-overlay);
-  backdrop-filter: blur(var(--glass-blur-overlay)) saturate(145%);
-  -webkit-backdrop-filter: blur(var(--glass-blur-overlay)) saturate(145%);
+  backdrop-filter: blur(var(--glass-blur-overlay));
+  -webkit-backdrop-filter: blur(var(--glass-blur-overlay));
 }
 
-/* Capsule Control System */
+/* Matte Capsule System */
 .capsule {
   border-radius: var(--radius-capsule);
-  background: var(--browser-surface-hover);
+  background: var(--browser-surface-secondary);
   border: 1px solid var(--browser-border);
-  transition: background var(--motion-micro), border-color var(--motion-micro), transform var(--motion-micro);
+  transition: background var(--motion-micro), border-color var(--motion-micro);
 }
 
 .capsule:hover {
-  background: rgba(255, 255, 255, 0.075);
+  background: var(--browser-surface-elevated);
   border-color: var(--browser-border-strong);
 }
 
 .capsule[data-active="true"] {
   background: var(--browser-surface-selected);
-  border-color: var(--browser-accent-border);
+  border-color: var(--browser-cyan-border);
 }
 
 .capsule:focus-visible {
@@ -274,7 +256,7 @@ body, html, #root {
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: scale(0.98);
+    transform: scale(0.99);
   }
   to {
     opacity: 1;
@@ -289,7 +271,7 @@ body, html, #root {
 @keyframes slideInFromLeft {
   from {
     opacity: 0;
-    transform: translateX(-8px);
+    transform: translateX(-6px);
   }
   to {
     opacity: 1;

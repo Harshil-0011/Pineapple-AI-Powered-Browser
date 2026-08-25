@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Sparkles, Globe, Compass, ArrowRight, Github, FileText, Bookmark, Clock } from 'lucide-react';
+import { Search, Sparkles, Globe, Compass, ArrowRight, Github, FileText, Clock } from 'lucide-react';
 
 interface NewTabPageProps {
   onNavigate: (url: string) => void;
@@ -40,16 +40,10 @@ export const NewTabPage: React.FC<NewTabPageProps> = ({
 
   return (
     <div className="relative w-full h-full bg-[var(--browser-canvas-deep)] text-[var(--browser-text-primary)] flex flex-col items-center justify-center p-8 overflow-y-auto select-none">
-      {/* Subtle Atmospheric Gradient Aura (Section 37) */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.12),transparent_70%)] blur-3xl opacity-80" />
-        <div className="absolute bottom-10 right-20 w-[400px] h-[300px] bg-[radial-gradient(circle_at_center,rgba(167,139,250,0.08),transparent_70%)] blur-3xl opacity-70" />
-      </div>
-
       <div className="relative z-10 max-w-2xl w-full flex flex-col items-center gap-8 animate-fade-in">
-        {/* Time Greeting Header */}
+        {/* Header */}
         <div className="flex flex-col items-center gap-2 text-center">
-          <span className="text-xs font-semibold uppercase tracking-widest text-[var(--browser-accent-cyan)] px-3 py-1 rounded-full bg-[rgba(6,182,212,0.12)] border border-[var(--browser-cyan-border)]">
+          <span className="text-xs font-semibold uppercase tracking-widest text-[var(--browser-accent)] px-3 py-1 rounded-full bg-amber-500/10 border border-[var(--browser-accent-border)]">
             {activeWorkspace} Workspace
           </span>
           <h1 className="text-4xl font-bold font-[var(--font-display)] tracking-tight text-[var(--browser-text-primary)]">
@@ -60,12 +54,12 @@ export const NewTabPage: React.FC<NewTabPageProps> = ({
           </p>
         </div>
 
-        {/* Expressive Capsule Omnibox Input */}
+        {/* Capsule Search Input */}
         <form
           onSubmit={handleSearch}
-          className="w-full max-w-xl h-12 px-4 rounded-full glass-elevated bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-strong)] focus-within:border-[var(--browser-cyan-border)] focus-within:ring-2 focus-within:ring-[rgba(6,182,212,0.22)] shadow-xl flex items-center gap-3 transition-all"
+          className="w-full max-w-xl h-12 px-4 rounded-full glass-elevated bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-strong)] focus-within:border-[var(--browser-accent-border)] shadow-md flex items-center gap-3 transition-all"
         >
-          <Sparkles size={18} className="text-[var(--browser-accent-cyan)] shrink-0" />
+          <Sparkles size={18} className="text-[var(--browser-accent)] shrink-0" />
           <input
             type="text"
             value={query}
@@ -75,7 +69,7 @@ export const NewTabPage: React.FC<NewTabPageProps> = ({
           />
           <button
             type="submit"
-            className="w-8 h-8 rounded-full bg-[var(--browser-accent-cyan)] text-[#080A0D] flex items-center justify-center hover:scale-105 transition-transform"
+            className="w-8 h-8 rounded-full bg-[var(--browser-accent)] text-[#090B0F] font-semibold flex items-center justify-center hover:scale-105 transition-transform"
           >
             <ArrowRight size={14} />
           </button>
@@ -87,19 +81,19 @@ export const NewTabPage: React.FC<NewTabPageProps> = ({
             <button
               key={site.title}
               onClick={() => onNavigate(site.url)}
-              className="capsule px-4 py-2.5 text-xs text-[var(--browser-text-primary)] flex items-center gap-2 hover:border-[var(--browser-cyan-border)] hover:bg-[var(--browser-surface-hover)] transition-all"
+              className="capsule px-4 py-2.5 text-xs text-[var(--browser-text-primary)] flex items-center gap-2 hover:border-[var(--browser-accent-border)] hover:bg-[var(--browser-surface-elevated)] transition-all"
             >
-              <span className="text-[var(--browser-accent-cyan)]">{site.icon}</span>
+              <span className="text-[var(--browser-accent)]">{site.icon}</span>
               <span className="font-medium">{site.title}</span>
             </button>
           ))}
         </div>
 
-        {/* Recent Workspace Context */}
+        {/* Recent Workspace Activity */}
         <div className="w-full max-w-md p-4 rounded-2xl glass-subtle bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-subtle)] flex flex-col gap-2.5">
           <div className="flex items-center justify-between text-[11px] font-semibold uppercase tracking-wider text-[var(--browser-text-muted)]">
             <span className="flex items-center gap-1.5">
-              <Clock size={12} className="text-[var(--browser-accent-cyan)]" /> Continue where you left off
+              <Clock size={12} className="text-[var(--browser-accent)]" /> Continue where you left off
             </span>
           </div>
           <div className="flex flex-col gap-1.5 text-xs">
