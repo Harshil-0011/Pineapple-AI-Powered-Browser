@@ -16,8 +16,9 @@ import { Downloads } from './components/browser-features/Downloads';
 import { Settings } from './components/browser-features/Settings';
 import { CommandPalette } from './components/command/CommandPalette';
 import { ArtifactViewer } from './components/command/ArtifactViewer';
+import { NewTabPage } from './components/command/NewTabPage';
 import { agentService } from './agent-service';
-import { Plus, X } from 'lucide-react';
+import { Plus, X, Globe } from 'lucide-react';
 import './styles.css';
 
 export const App: React.FC = () => {
@@ -41,7 +42,7 @@ export const App: React.FC = () => {
   ]);
 
   const [history, setHistory] = useState<HistoryItem[]>([
-    { id: 'h1', title: 'Google', url: 'https://www.google.com', visitedAt: Date.now() - 3600000 },
+    { id: 'h1', title: 'Google Search Engine', url: 'https://www.google.com', visitedAt: Date.now() - 3600000 },
     { id: 'h2', title: 'GitHub Workspace', url: 'https://github.com', visitedAt: Date.now() - 1800000 },
   ]);
 
@@ -65,12 +66,20 @@ export const App: React.FC = () => {
     const syncViewport = () => {
       if (viewportRef.current && (window as any).pineapple?.updateViewportBounds) {
         const rect = viewportRef.current.getBoundingClientRect();
-        (window as any).pineapple.updateViewportBounds({
-          x: Math.round(rect.left),
-          y: Math.round(rect.top),
-          width: Math.round(rect.width),
-          height: Math.round(rect.height),
-        });
+        // If viewing history page or settings or blank tab on renderer, hide browser view
+        const activeTab = tabs.find((t) => t.id === activeTabId);
+        const isNewTab = !activeTab || activeTab.url === 'about:blank' || activeTab.url === 'pineapple://newtab';
+
+        if (showHistoryView || activeRailTab === 'settings' || isNewTab) {
+          (window as any).pineapple.updateViewportBounds({ x: 0, y: 0, width: 0, height: 0 });
+        } else {
+          (window as any).pineapple.updateViewportBounds({
+            x: Math.round(rect.left),
+            y: Math.round(rect.top),
+            width: Math.round(rect.width),
+            height: Math.round(rect.height),
+          });
+        }
       }
     };
 
@@ -83,7 +92,7 @@ export const App: React.FC = () => {
       window.removeEventListener('resize', syncViewport);
       observer.disconnect();
     };
-  }, [activeRailTab, isVerticalTabs, showHistoryView]);
+  }, [activeRailTab, isVerticalTabs, showHistoryView, activeTabId, tabs]);
 
   // Command Palette shortcut (Cmd+K / Ctrl+K)
   useEffect(() => {
@@ -122,9 +131,10 @@ export const App: React.FC = () => {
   }, []);
 
   const activeTab = tabs.find((t) => t.id === activeTabId) || null;
+  const isNewTab = !activeTab || activeTab.url === 'about:blank' || activeTab.url === 'pineapple://newtab';
 
   const handleCreateTab = () => {
-    (window as any).pineapple?.createTab('https://www.google.com');
+    (window as any).pineapple?.createTab('about:blank');
   };
 
   const handleCloseTab = (id: string) => {
@@ -211,13 +221,14 @@ export const App: React.FC = () => {
       {/* LAYER 2: Context Sidebar */}
       <ContextSidebar activeRailTab={activeRailTab}>
         {activeRailTab === 'workspaces' && (
-          <div className="flex-1 flex flex-col h-full p-3 gap-3 overflow-y-auto">
+          <div className="flex-1 flex flex-col h-full p-3.5 gap-3.5 overflow-y-auto">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-semibold text-[var(--browser-text-muted)] tracking-wider uppercase">
                 Workspace
               </span>
               <button
                 onClick={handleCreateTab}
+                title="New Tab"
                 className="p-1 rounded-md text-[var(--browser-text-secondary)] hover:text-[var(--browser-text-primary)] hover:bg-[var(--browser-surface-hover)]"
               >
                 <Plus size={14} />
@@ -236,29 +247,29 @@ export const App: React.FC = () => {
               </span>
               <button
                 onClick={handleCreateTab}
-                className="text-[11px] text-[var(--browser-accent)] hover:underline flex items-center gap-1"
+                className="text-[11px] text-[var(--browser-accent-cyan)] hover:underline flex items-center gap-1 font-medium"
               >
                 <Plus size={12} /> New Tab
               </button>
             </div>
 
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1.5">
               {tabs.map((tab) => {
                 const isActive = tab.id === activeTabId;
                 return (
                   <div
                     key={tab.id}
                     onClick={() => handleSwitchTab(tab.id)}
-                    className={`group relative flex items-center justify-between p-2 rounded-lg cursor-pointer transition-all border ${
+                    className={`group relative flex items-center justify-between p-2.5 rounded-xl cursor-pointer transition-all border ${
                       isActive
-                        ? 'bg-[var(--browser-surface-selected)] border-[var(--browser-accent-border)] text-[var(--browser-text-primary)]'
+                        ? 'bg-[var(--browser-surface-selected)] border-[var(--browser-cyan-border)] text-[var(--browser-text-primary)] shadow-sm'
                         : 'bg-transparent border-transparent text-[var(--browser-text-secondary)] hover:bg-[var(--browser-surface-hover)] hover:text-[var(--browser-text-primary)]'
                     }`}
                   >
                     <div className="flex items-center gap-2 overflow-hidden flex-1">
-                      <span className="w-2 h-2 rounded-full bg-[var(--browser-accent)] opacity-60" />
+                      <Globe size={13} className={isActive ? 'text-[var(--browser-accent-cyan)]' : 'text-[var(--browser-text-muted)]'} />
                       <span className="text-xs truncate font-medium">
-                        {tab.title || tab.url}
+                        {tab.title || tab.url || 'New Tab'}
                       </span>
                     </div>
                     <button
@@ -323,12 +334,17 @@ export const App: React.FC = () => {
 
         <BrowserToolbar
           activeTab={activeTab}
+          tabs={tabs}
+          history={history}
+          bookmarks={bookmarks}
           onNavigate={handleNavigate}
+          onSwitchTab={handleSwitchTab}
           onGoBack={handleGoBack}
           onGoForward={handleGoForward}
           onReload={handleReload}
           onToggleDownloads={() => setShowDownloads(!showDownloads)}
           onToggleHistory={() => setShowHistoryView(!showHistoryView)}
+          onSendAIPrompt={handleSendMessage}
         />
 
         <BookmarksBar bookmarks={bookmarks} onNavigate={handleNavigate} />
@@ -345,7 +361,15 @@ export const App: React.FC = () => {
             onClearHistory={() => setHistory([])}
           />
         ) : (
-          <BrowserViewport ref={viewportRef} />
+          <BrowserViewport ref={viewportRef}>
+            {isNewTab && (
+              <NewTabPage
+                onNavigate={handleNavigate}
+                onSendAIPrompt={handleSendMessage}
+                activeWorkspace={activeWorkspaceName}
+              />
+            )}
+          </BrowserViewport>
         )}
 
         <CommandPalette
@@ -363,7 +387,7 @@ export const App: React.FC = () => {
           onClose={() => setShowArtifactViewer(false)}
           title="Competitive Market Audit Matrix"
           type="table"
-          data={{ summary: 'Synthesized pricing structures across top software competitors.' }}
+          data={{ summary: 'Synthesized pricing structures across top software competitors in your quiet spatial workspace.' }}
         />
 
         {showDownloads && (

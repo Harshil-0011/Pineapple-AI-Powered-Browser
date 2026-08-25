@@ -9,23 +9,23 @@ interface BookmarksProps {
 
 export const Bookmarks: React.FC<BookmarksProps> = ({ bookmarks, onNavigate }) => {
   return (
-    <div className="flex-1 p-3 flex flex-col gap-3 overflow-y-auto">
+    <div className="flex-1 p-3.5 flex flex-col gap-3 overflow-y-auto select-none">
       <div className="flex items-center justify-between">
-        <span className="text-[11px] font-semibold text-[var(--browser-text-muted)] uppercase">
+        <span className="text-[11px] font-semibold text-[var(--browser-text-muted)] uppercase tracking-wider">
           Bookmarks ({bookmarks.length})
         </span>
-        <BookmarkIcon size={14} className="text-[var(--browser-accent)]" />
+        <BookmarkIcon size={14} className="text-[var(--browser-accent-cyan)]" />
       </div>
 
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1.5">
         {bookmarks.map((bm) => (
           <div
             key={bm.id}
             onClick={() => onNavigate(bm.url)}
-            className="flex items-center justify-between p-2 rounded-lg bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-subtle)] hover:border-[var(--browser-border)] text-xs text-[var(--browser-text-primary)] cursor-pointer truncate transition-colors"
+            className="flex items-center justify-between p-2.5 rounded-xl bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-subtle)] hover:border-[var(--browser-cyan-border)] hover:bg-[var(--browser-surface-hover)] text-xs text-[var(--browser-text-primary)] cursor-pointer truncate transition-all"
           >
-            <span className="truncate">{bm.title}</span>
-            <ExternalLink size={12} className="text-[var(--browser-text-muted)]" />
+            <span className="truncate font-medium">{bm.title}</span>
+            <ExternalLink size={12} className="text-[var(--browser-text-muted)] shrink-0 ml-2" />
           </div>
         ))}
       </div>

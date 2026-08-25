@@ -2,25 +2,25 @@
 
 :root {
   /* =========================
-     SURFACES
+     SURFACES (Section 3)
      ========================= */
-  --browser-canvas-deep: #080A0D;
-  --browser-canvas: #0B0D10;
+  --browser-canvas-deep: #050709;
+  --browser-canvas: #0A0D12;
   --browser-surface: #111418;
   --browser-surface-secondary: #15191E;
   --browser-surface-elevated: #1B2026;
   --browser-surface-active: #222830;
   --browser-surface-hover: rgba(255, 255, 255, 0.045);
-  --browser-surface-selected: rgba(138, 180, 255, 0.10);
+  --browser-surface-selected: rgba(6, 182, 212, 0.12);
 
-  /* Legacy aliases for backwards compatibility */
+  /* Legacy aliases */
   --bg-obsidian: var(--browser-canvas);
   --bg-panel: var(--browser-surface);
   --bg-card: var(--browser-surface-secondary);
   --bg-hover: var(--browser-surface-elevated);
 
   /* =========================
-     TEXT
+     TEXT (Section 3)
      ========================= */
   --browser-text-primary: #F2F4F7;
   --browser-text-secondary: #A5ACB8;
@@ -33,41 +33,41 @@
   --text-muted: var(--browser-text-muted);
 
   /* =========================
-     ACCENTS
+     ACCENTS (Section 3) - Dark Obsidian + Electric Cyan Accent (#06B6D4)
      ========================= */
-  --browser-accent: #8AB4FF;
+  --browser-accent: #06B6D4;
   --browser-accent-cyan: #06B6D4;
   --browser-accent-purple: #A78BFA;
   --browser-success: #55C98A;
   --browser-warning: #E7B75A;
   --browser-danger: #F06A6A;
-  --browser-info: #6FA8FF;
+  --browser-info: #06B6D4;
 
   /* Legacy aliases */
-  --accent-cyan: var(--browser-accent);
-  --accent-cyan-hover: #73a0f3;
+  --accent-cyan: var(--browser-accent-cyan);
+  --accent-cyan-hover: #22d3ee;
   --accent-blue: var(--browser-accent);
   --danger: var(--browser-danger);
   --success: var(--browser-success);
 
   /* =========================
-     BORDERS
+     BORDERS (Section 3)
      ========================= */
   --browser-border-subtle: rgba(255, 255, 255, 0.06);
   --browser-border: rgba(255, 255, 255, 0.09);
   --browser-border-strong: rgba(255, 255, 255, 0.14);
-  --browser-accent-border: rgba(138, 180, 255, 0.28);
-  --browser-cyan-border: rgba(6, 182, 212, 0.24);
+  --browser-accent-border: rgba(6, 182, 212, 0.32);
+  --browser-cyan-border: rgba(6, 182, 212, 0.28);
   --browser-purple-border: rgba(167, 139, 250, 0.24);
   --border-color: var(--browser-border);
 
   /* =========================
-     GLASSMORPHISM
+     GLASSMORPHISM (Section 3 & 5)
      ========================= */
   --glass-subtle: rgba(17, 20, 24, 0.58);
   --glass-elevated: rgba(21, 25, 30, 0.68);
   --glass-strong: rgba(27, 32, 38, 0.76);
-  --glass-overlay: rgba(8, 10, 13, 0.82);
+  --glass-overlay: rgba(5, 7, 9, 0.82);
 
   --glass-blur-subtle: 12px;
   --glass-blur-elevated: 20px;
@@ -75,15 +75,14 @@
   --glass-blur-overlay: 36px;
 
   /* =========================
-     RADIUS
+     RADIUS (Section 3)
      ========================= */
   --radius-xs: 4px;
   --radius-sm: 6px;
   --radius-md: 8px;
   --radius-lg: 10px;
   --radius-xl: 12px;
-  --radius-2xl: 14px;
-  --radius-floating: 16px;
+  --radius-2xl: 16px;
   --radius-capsule: 999px;
 
   /* =========================
@@ -101,14 +100,21 @@
   --space-16: 64px;
 
   /* =========================
-     SHADOWS
+     SHADOWS (Section 3 & 36)
      ========================= */
   --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.16);
   --shadow-md: 0 8px 28px rgba(0, 0, 0, 0.22);
   --shadow-lg: 0 18px 50px rgba(0, 0, 0, 0.30);
 
   /* =========================
-     MOTION
+     TYPOGRAPHY (Section 33)
+     ========================= */
+  --font-ui: "Inter", system-ui, -apple-system, sans-serif;
+  --font-display: "Space Grotesk", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", Consolas, monospace;
+
+  /* =========================
+     MOTION (Section 3 & 38)
      ========================= */
   --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
@@ -117,18 +123,9 @@
   --motion-micro: 120ms var(--ease-standard);
   --motion-standard: 200ms var(--ease-standard);
   --motion-panel: 260ms var(--ease-standard);
-  --motion-navigation: 320ms var(--ease-standard);
-  --motion-expressive: 600ms var(--ease-standard);
 
   /* =========================
-     TYPOGRAPHY
-     ========================= */
-  --font-ui: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-display: "Space Grotesk", system-ui, -apple-system, sans-serif;
-  --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
-
-  /* =========================
-     Z-INDEX
+     Z-INDEX (Section 3)
      ========================= */
   --z-content: 0;
   --z-chrome: 100;
@@ -137,11 +134,10 @@
   --z-popover: 500;
   --z-overlay: 600;
   --z-modal: 700;
-  --z-toast: 9000;
 }
 
 /* =========================
-   LIGHT THEME OVERRIDES
+   LIGHT THEME OVERRIDES (Section 4)
    ========================= */
 [data-theme="light"] {
   --browser-canvas-deep: #EDEFF2;
@@ -152,25 +148,26 @@
   --browser-surface-active: #EEF2F7;
 
   --browser-surface-hover: rgba(15, 23, 42, 0.035);
-  --browser-surface-selected: rgba(50, 103, 214, 0.09);
+  --browser-surface-selected: rgba(8, 145, 178, 0.09);
 
   --browser-text-primary: #171A1F;
   --browser-text-secondary: #59616D;
   --browser-text-muted: #7D8590;
   --browser-text-disabled: #A4AAB2;
 
-  --browser-accent: #3267D6;
+  --browser-accent: #0891B2;
   --browser-accent-cyan: #0891B2;
   --browser-accent-purple: #7254C7;
 
   --browser-success: #258A58;
   --browser-warning: #A36E08;
   --browser-danger: #C83F47;
-  --browser-info: #3267D6;
+  --browser-info: #0891B2;
 
   --browser-border-subtle: rgba(15, 23, 42, 0.055);
   --browser-border: rgba(15, 23, 42, 0.09);
   --browser-border-strong: rgba(15, 23, 42, 0.14);
+  --browser-accent-border: rgba(8, 145, 178, 0.28);
 
   --glass-subtle: rgba(255, 255, 255, 0.68);
   --glass-elevated: rgba(255, 255, 255, 0.78);
@@ -212,9 +209,15 @@ body, html, #root {
   background: var(--browser-surface-active);
 }
 
-/* =========================
-   GLASSMORPHISM UTILITIES
-   ========================= */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Glassmorphism Utilities */
 .glass-subtle {
   background: var(--glass-subtle);
   backdrop-filter: blur(var(--glass-blur-subtle)) saturate(125%);
@@ -244,9 +247,7 @@ body, html, #root {
   -webkit-backdrop-filter: blur(var(--glass-blur-overlay)) saturate(145%);
 }
 
-/* =========================
-   CAPSULE CONTROL SYSTEM
-   ========================= */
+/* Capsule Control System */
 .capsule {
   border-radius: var(--radius-capsule);
   background: var(--browser-surface-hover);
@@ -269,7 +270,37 @@ body, html, #root {
   outline-offset: 2px;
 }
 
-/* Reduced transparency support */
+/* Keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn var(--motion-standard) forwards;
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-left {
+  animation: slideInFromLeft var(--motion-panel) forwards;
+}
+
 @media (prefers-reduced-transparency: reduce) {
   .glass-subtle, .glass-elevated, .glass-strong, .glass-overlay {
     backdrop-filter: none !important;
@@ -278,7 +309,6 @@ body, html, #root {
   }
 }
 
-/* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;
