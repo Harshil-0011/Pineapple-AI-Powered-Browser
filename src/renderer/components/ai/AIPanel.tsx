@@ -27,7 +27,7 @@ export const AIPanel: React.FC<AIPanelProps> = ({
     <div className="flex-1 flex flex-col h-full overflow-hidden select-none">
       <div className="p-3 border-b border-[var(--browser-border-subtle)] flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Sparkles size={16} className="text-[var(--browser-accent)]" />
+          <Sparkles size={16} className="text-[var(--browser-accent-cyan)]" />
           <span className="text-xs font-semibold text-[var(--browser-text-primary)]">
             Pineapple AI Companion
           </span>
@@ -35,14 +35,14 @@ export const AIPanel: React.FC<AIPanelProps> = ({
         {onOpenArtifact && (
           <button
             onClick={onOpenArtifact}
-            className="text-[11px] text-[var(--browser-accent)] hover:underline flex items-center gap-1 font-medium"
+            className="text-[11px] text-[var(--browser-accent-purple)] hover:underline flex items-center gap-1 font-medium"
           >
             <FileText size={12} /> Artifact
           </button>
         )}
       </div>
 
-      {/* 4 AI Sub-tabs */}
+      {/* 4 AI Sub-tabs (Chat, DOM / AX Tree, Skills, Context) */}
       <div className="flex items-center gap-1 p-1.5 bg-[var(--browser-surface-secondary)] border-b border-[var(--browser-border-subtle)]">
         {(['chat', 'dom', 'skills', 'context'] as const).map((st) => (
           <button
@@ -50,7 +50,7 @@ export const AIPanel: React.FC<AIPanelProps> = ({
             onClick={() => setSubTab(st)}
             className={`flex-1 py-1 text-[10px] font-semibold uppercase tracking-wider rounded-md transition-all ${
               subTab === st
-                ? 'bg-[var(--browser-surface-elevated)] text-[var(--browser-accent)] border border-[var(--browser-accent-border)] shadow-sm'
+                ? 'bg-[var(--browser-surface-elevated)] text-[var(--browser-accent-cyan)] border border-[var(--browser-cyan-border)] shadow-sm'
                 : 'text-[var(--browser-text-muted)] hover:text-[var(--browser-text-secondary)]'
             }`}
           >

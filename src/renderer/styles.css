@@ -2,14 +2,14 @@
 
 :root {
   /* =========================
-     SURFACES — Flat Matte Charcoal Slate
+     SURFACES — Flat Matte Slate Charcoal (No Obsidian, No Cyan)
      ========================= */
-  --browser-canvas-deep: #090B0F;
-  --browser-canvas: #0E1117;
-  --browser-surface: #141822;
-  --browser-surface-secondary: #1A1F2C;
-  --browser-surface-elevated: #212736;
-  --browser-surface-active: #293042;
+  --browser-canvas-deep: #0D0F14;
+  --browser-canvas: #12151C;
+  --browser-surface: #181C26;
+  --browser-surface-secondary: #1F2432;
+  --browser-surface-elevated: #262D3D;
+  --browser-surface-active: #2F3648;
   --browser-surface-hover: rgba(255, 255, 255, 0.045);
   --browser-surface-selected: rgba(217, 119, 6, 0.12);
 
@@ -33,7 +33,7 @@
   --text-muted: var(--browser-text-muted);
 
   /* =========================
-     ACCENTS — Warm Amber (#D97706) & Emerald Green (#10B981)
+     ACCENTS — Warm Amber (#D97706) & Emerald (#10B981)
      ========================= */
   --browser-accent: #D97706;
   --browser-accent-cyan: #D97706;
@@ -62,12 +62,12 @@
   --border-color: var(--browser-border);
 
   /* =========================
-     FLAT MATTE GLASS (No Neon Blur or Glow)
+     FLAT MATTE GLASS (No Neon Glow)
      ========================= */
-  --glass-subtle: rgba(20, 24, 34, 0.88);
-  --glass-elevated: rgba(26, 31, 44, 0.92);
-  --glass-strong: rgba(33, 39, 54, 0.95);
-  --glass-overlay: rgba(9, 11, 15, 0.88);
+  --glass-subtle: rgba(24, 28, 38, 0.88);
+  --glass-elevated: rgba(31, 36, 50, 0.92);
+  --glass-strong: rgba(38, 45, 61, 0.95);
+  --glass-overlay: rgba(13, 15, 20, 0.88);
 
   --glass-blur-subtle: 10px;
   --glass-blur-elevated: 16px;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Play, Sparkles } from 'lucide-react';
+import { Play } from 'lucide-react';
 
 interface SkillsProps {
   onRunSkill: (skill: string) => void;
@@ -24,17 +24,17 @@ export const Skills: React.FC<SkillsProps> = ({ onRunSkill }) => {
           <button
             key={skill.title}
             onClick={() => onRunSkill(`Run skill: ${skill.title}`)}
-            className="p-3 text-left rounded-xl bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-subtle)] hover:border-[var(--browser-cyan-border)] hover:bg-[var(--browser-surface-hover)] text-xs text-[var(--browser-text-primary)] transition-all group flex items-center justify-between"
+            className="p-3 text-left rounded-xl bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-subtle)] hover:border-[var(--browser-accent-border)] hover:bg-[var(--browser-surface-elevated)] text-xs text-[var(--browser-text-primary)] transition-all group flex items-center justify-between"
           >
             <div className="flex flex-col gap-0.5">
-              <span className="font-medium text-[var(--browser-text-primary)] group-hover:text-[var(--browser-accent-cyan)] transition-colors">
+              <span className="font-medium text-[var(--browser-text-primary)] group-hover:text-[var(--browser-accent)] transition-colors">
                 {skill.title}
               </span>
               <span className="text-[11px] text-[var(--browser-text-muted)]">
                 {skill.desc}
               </span>
             </div>
-            <Play size={12} className="text-[var(--browser-accent-cyan)] opacity-0 group-hover:opacity-100 transition-opacity shrink-0 ml-2" />
+            <Play size={12} className="text-[var(--browser-accent)] opacity-0 group-hover:opacity-100 transition-opacity shrink-0 ml-2" />
           </button>
         ))}
       </div>

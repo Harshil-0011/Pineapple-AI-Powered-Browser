@@ -66,7 +66,6 @@ export const App: React.FC = () => {
     const syncViewport = () => {
       if (viewportRef.current && (window as any).pineapple?.updateViewportBounds) {
         const rect = viewportRef.current.getBoundingClientRect();
-        // If viewing history page or settings or blank tab on renderer, hide browser view
         const activeTab = tabs.find((t) => t.id === activeTabId);
         const isNewTab = !activeTab || activeTab.url === 'about:blank' || activeTab.url === 'pineapple://newtab';
 
@@ -247,7 +246,7 @@ export const App: React.FC = () => {
               </span>
               <button
                 onClick={handleCreateTab}
-                className="text-[11px] text-[var(--browser-accent-cyan)] hover:underline flex items-center gap-1 font-medium"
+                className="text-[11px] text-[var(--browser-accent)] hover:underline flex items-center gap-1 font-medium"
               >
                 <Plus size={12} /> New Tab
               </button>
@@ -262,12 +261,12 @@ export const App: React.FC = () => {
                     onClick={() => handleSwitchTab(tab.id)}
                     className={`group relative flex items-center justify-between p-2.5 rounded-xl cursor-pointer transition-all border ${
                       isActive
-                        ? 'bg-[var(--browser-surface-selected)] border-[var(--browser-cyan-border)] text-[var(--browser-text-primary)] shadow-sm'
+                        ? 'bg-[var(--browser-surface-selected)] border-[var(--browser-accent-border)] text-[var(--browser-text-primary)] shadow-sm'
                         : 'bg-transparent border-transparent text-[var(--browser-text-secondary)] hover:bg-[var(--browser-surface-hover)] hover:text-[var(--browser-text-primary)]'
                     }`}
                   >
                     <div className="flex items-center gap-2 overflow-hidden flex-1">
-                      <Globe size={13} className={isActive ? 'text-[var(--browser-accent-cyan)]' : 'text-[var(--browser-text-muted)]'} />
+                      <Globe size={13} className={isActive ? 'text-[var(--browser-accent)]' : 'text-[var(--browser-text-muted)]'} />
                       <span className="text-xs truncate font-medium">
                         {tab.title || tab.url || 'New Tab'}
                       </span>

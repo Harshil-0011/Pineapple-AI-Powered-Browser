@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tab as TabType } from '../../../shared/types';
-import { Globe, X, Moon } from 'lucide-react';
+import { Globe, X, Volume2, Moon } from 'lucide-react';
 
 interface TabProps {
   tab: TabType;
@@ -22,12 +22,12 @@ export const Tab: React.FC<TabProps> = ({
       onClick={() => onSelect(tab.id)}
       className={`group relative flex items-center justify-between gap-2 px-3 py-1 rounded-xl cursor-pointer transition-all border text-xs select-none ${
         isActive
-          ? 'bg-[var(--browser-surface-elevated)] border-[var(--browser-accent-border)] text-[var(--browser-text-primary)] shadow-sm'
+          ? 'bg-[var(--browser-surface-elevated)] border-[var(--browser-cyan-border)] text-[var(--browser-text-primary)] shadow-sm'
           : 'bg-transparent border-transparent text-[var(--browser-text-secondary)] hover:bg-[var(--browser-surface-hover)] hover:text-[var(--browser-text-primary)]'
       } ${isVertical ? 'w-full h-8' : 'h-7 max-w-[220px] min-w-[120px]'}`}
     >
       <div className="flex items-center gap-2 truncate">
-        <Globe size={13} className={isActive ? 'text-[var(--browser-accent)]' : 'text-[var(--browser-text-muted)]'} />
+        <Globe size={13} className={isActive ? 'text-[var(--browser-accent-cyan)]' : 'text-[var(--browser-text-muted)]'} />
         <span className="truncate font-medium">{tab.title || 'New Tab'}</span>
       </div>
 

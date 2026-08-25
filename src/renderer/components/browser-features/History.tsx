@@ -23,21 +23,21 @@ export const History: React.FC<HistoryProps> = ({ history, onNavigate, onClearHi
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-[var(--browser-border-subtle)]">
           <div className="flex items-center gap-3">
-            <Clock size={24} className="text-[var(--browser-accent-cyan)]" />
+            <Clock size={24} className="text-[var(--browser-accent)]" />
             <h1 className="text-2xl font-bold font-[var(--font-display)] tracking-tight">
               Browsing History
             </h1>
           </div>
           <button
             onClick={onClearHistory}
-            className="capsule px-3.5 py-1.5 text-xs text-[var(--browser-danger)] border-[var(--browser-danger)] hover:bg-[rgba(240,106,106,0.1)] flex items-center gap-1.5 font-medium transition-all"
+            className="capsule px-3.5 py-1.5 text-xs text-[var(--browser-danger)] border-[var(--browser-danger)] hover:bg-[rgba(239,68,68,0.1)] flex items-center gap-1.5 font-medium transition-all"
           >
             <Trash2 size={13} /> Clear History
           </button>
         </div>
 
         {/* Search Capsule Input */}
-        <div className="flex items-center bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-subtle)] focus-within:border-[var(--browser-cyan-border)] rounded-full px-4 py-2.5 transition-all">
+        <div className="flex items-center bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-subtle)] focus-within:border-[var(--browser-accent-border)] rounded-full px-4 py-2.5 transition-all">
           <Search size={16} className="text-[var(--browser-text-muted)] mr-2.5 shrink-0" />
           <input
             type="text"
@@ -59,10 +59,10 @@ export const History: React.FC<HistoryProps> = ({ history, onNavigate, onClearHi
               <div
                 key={item.id}
                 onClick={() => onNavigate(item.url)}
-                className="bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-subtle)] hover:border-[var(--browser-cyan-border)] rounded-2xl p-3.5 flex items-center justify-between cursor-pointer transition-all hover:bg-[var(--browser-surface-hover)]"
+                className="bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-subtle)] hover:border-[var(--browser-accent-border)] rounded-2xl p-3.5 flex items-center justify-between cursor-pointer transition-all hover:bg-[var(--browser-surface-hover)]"
               >
                 <div className="flex items-center gap-3 flex-1 overflow-hidden">
-                  <Globe size={16} className="text-[var(--browser-accent-cyan)] shrink-0" />
+                  <Globe size={16} className="text-[var(--browser-accent)] shrink-0" />
                   <div className="overflow-hidden">
                     <div className="text-xs font-medium text-[var(--browser-text-primary)] truncate">
                       {item.title}

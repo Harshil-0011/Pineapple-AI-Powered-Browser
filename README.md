@@ -12,7 +12,7 @@
   - **Control Rail (52px)**: Spatial navigation anchor for Workspaces, AI Companion, Bookmarks, History, Downloads, and Settings.
   - **Resizable Context Sidebar**: Draggable width adjustment (220px to 400px) with workspace tab management and sleeping tab badges.
   - **Floating Capsule Omnibox**: Live categorized suggestions dropdown (Open Tabs, History, Bookmarks, AI Prompts), HTTPS security indicator, and bookmark trigger.
-- **Expressive New Tab Canvas**: Space Grotesk greeting, glowing capsule search/AI prompt, quick site shortcuts (Google, GitHub, Docs, Hacker News), and recent workspace activity cards.
+- **Expressive New Tab Canvas**: Space Grotesk greeting, flat matte capsule search/AI prompt, quick site shortcuts (Google, GitHub, Docs, Hacker News), and recent workspace activity cards.
 - **Pineapple AI Companion**:
   - **Chat**: Conversation assistant with context awareness.
   - **DOM / AX Tree**: JetBrains Mono monospace DOM inspector with element references (`data-pineapple-ref`).
@@ -61,8 +61,8 @@ npm start
 
 Pineapple AI Browser follows a **Handcrafted Matte Desktop Workspace** design system:
 
-- **Canvas**: Pure Matte Charcoal Slate (`#090B0F` / `#141822`)
-- **Accent**: Soft Muted Amber (`#D97706`) & Emerald Green (`#10B981`)
+- **Canvas**: Pure Matte Charcoal Slate (`#0D0F14` / `#181C26`)
+- **Accent**: Soft Warm Amber (`#D97706`) & Emerald Green (`#10B981`)
 - **Typography**: Inter (Primary UI), Space Grotesk (Headings), JetBrains Mono (Developer/Code)
 - **Controls**: Flat Matte Capsules & Subtle Glass
 

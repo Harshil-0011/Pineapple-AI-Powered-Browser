@@ -24,12 +24,12 @@ export const AIChat: React.FC<AIChatProps> = ({ messages, onSendMessage }) => {
             key={m.id}
             className={`p-3 rounded-2xl text-xs max-w-[88%] leading-relaxed ${
               m.sender === 'user'
-                ? 'bg-[var(--browser-accent)] text-[#090B0F] font-medium self-end rounded-br-xs shadow-sm'
+                ? 'bg-[var(--browser-accent-cyan)] text-[#080A0D] font-medium self-end rounded-br-xs shadow-sm'
                 : 'bg-[var(--browser-surface-secondary)] text-[var(--browser-text-primary)] border border-[var(--browser-border-subtle)] self-start rounded-bl-xs'
             }`}
           >
             {m.sender === 'ai' && (
-              <div className="flex items-center gap-1.5 mb-1 text-[10px] text-[var(--browser-accent)] font-semibold uppercase tracking-wider">
+              <div className="flex items-center gap-1.5 mb-1 text-[10px] text-[var(--browser-accent-cyan)] font-semibold uppercase tracking-wider">
                 <Sparkles size={11} /> Pineapple AI
               </div>
             )}
@@ -38,7 +38,7 @@ export const AIChat: React.FC<AIChatProps> = ({ messages, onSendMessage }) => {
         ))}
       </div>
 
-      <div className="flex items-center gap-2 p-1.5 bg-[var(--browser-surface-secondary)] rounded-full border border-[var(--browser-border)] focus-within:border-[var(--browser-accent-border)] transition-all">
+      <div className="flex items-center gap-2 p-1.5 bg-[var(--browser-surface-secondary)] rounded-full border border-[var(--browser-border)] focus-within:border-[var(--browser-cyan-border)] focus-within:ring-2 focus-within:ring-[rgba(6,182,212,0.15)] transition-all">
         <input
           type="text"
           value={prompt}
@@ -49,7 +49,7 @@ export const AIChat: React.FC<AIChatProps> = ({ messages, onSendMessage }) => {
         />
         <button
           onClick={handleSend}
-          className="w-7 h-7 rounded-full bg-[var(--browser-accent)] text-[#090B0F] flex items-center justify-center hover:scale-105 transition-transform"
+          className="w-7 h-7 rounded-full bg-[var(--browser-accent-cyan)] text-[#080A0D] flex items-center justify-center hover:scale-105 transition-transform"
         >
           <Send size={12} />
         </button>

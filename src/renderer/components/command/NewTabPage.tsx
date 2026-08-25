@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Sparkles, Globe, Compass, ArrowRight, Github, FileText, Clock } from 'lucide-react';
+import { Sparkles, Globe, Compass, ArrowRight, Github, FileText, Clock } from 'lucide-react';
 
 interface NewTabPageProps {
   onNavigate: (url: string) => void;
@@ -69,7 +69,7 @@ export const NewTabPage: React.FC<NewTabPageProps> = ({
           />
           <button
             type="submit"
-            className="w-8 h-8 rounded-full bg-[var(--browser-accent)] text-[#090B0F] font-semibold flex items-center justify-center hover:scale-105 transition-transform"
+            className="w-8 h-8 rounded-full bg-[var(--browser-accent)] text-[#0D0F14] font-semibold flex items-center justify-center hover:scale-105 transition-transform"
           >
             <ArrowRight size={14} />
           </button>

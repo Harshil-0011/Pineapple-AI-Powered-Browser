@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sliders, Moon, Sun, Shield, Zap, Sparkles, Monitor, Key } from 'lucide-react';
+import { Sliders, Moon, Sun, Shield, Zap, Sparkles } from 'lucide-react';
 
 interface SettingsProps {
   currentTheme?: 'dark' | 'light';
@@ -15,7 +15,7 @@ export const Settings: React.FC<SettingsProps> = ({
       <div className="max-w-2xl mx-auto flex flex-col gap-6 animate-fade-in">
         {/* Settings Header */}
         <div className="flex items-center gap-3 border-b border-[var(--browser-border-subtle)] pb-4">
-          <Sliders size={24} className="text-[var(--browser-accent-cyan)]" />
+          <Sliders size={24} className="text-[var(--browser-accent)]" />
           <h1 className="text-2xl font-bold font-[var(--font-display)] tracking-tight">
             Browser Preferences
           </h1>
@@ -26,15 +26,15 @@ export const Settings: React.FC<SettingsProps> = ({
           <div className="flex flex-col gap-1">
             <span className="text-xs font-semibold text-[var(--browser-text-primary)]">Theme Appearance</span>
             <span className="text-[11px] text-[var(--browser-text-muted)]">
-              Switch between Quiet Obsidian dark mode and light canvas
+              Switch between Quiet Slate dark mode and light canvas
             </span>
           </div>
           <button
             onClick={onToggleTheme}
-            className="capsule px-3.5 py-1.5 text-xs flex items-center gap-2 bg-[var(--browser-surface-elevated)] border-[var(--browser-cyan-border)]"
+            className="capsule px-3.5 py-1.5 text-xs flex items-center gap-2 bg-[var(--browser-surface-elevated)] border-[var(--browser-accent-border)]"
           >
             {currentTheme === 'dark' ? (
-              <Moon size={14} className="text-[var(--browser-accent-cyan)]" />
+              <Moon size={14} className="text-[var(--browser-accent)]" />
             ) : (
               <Sun size={14} className="text-[var(--browser-warning)]" />
             )}
@@ -76,7 +76,7 @@ export const Settings: React.FC<SettingsProps> = ({
               Local DOM AXTree perception & agent reasoning engine
             </span>
           </div>
-          <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[rgba(6,182,212,0.12)] text-[var(--browser-accent-cyan)] border border-[var(--browser-cyan-border)] flex items-center gap-1.5">
+          <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-500/10 text-[var(--browser-accent)] border border-[var(--browser-accent-border)] flex items-center gap-1.5">
             <Sparkles size={13} /> Ready
           </span>
         </div>

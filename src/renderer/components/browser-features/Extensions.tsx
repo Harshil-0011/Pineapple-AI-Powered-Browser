@@ -8,7 +8,7 @@ export const Extensions: React.FC = () => {
         <span className="text-[11px] font-semibold text-[var(--browser-text-muted)] uppercase tracking-wider">
           Browser Extensions
         </span>
-        <Puzzle size={14} className="text-[var(--browser-accent-cyan)]" />
+        <Puzzle size={14} className="text-[var(--browser-accent)]" />
       </div>
 
       <div className="p-3.5 rounded-2xl bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-subtle)] flex flex-col gap-2">
