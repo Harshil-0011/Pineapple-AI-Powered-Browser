@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tab as TabType } from '../../../shared/types';
-import { Globe, X } from 'lucide-react';
+import { Globe, X, Volume2, Moon } from 'lucide-react';
 
 interface TabProps {
   tab: TabType;
@@ -20,25 +20,35 @@ export const Tab: React.FC<TabProps> = ({
   return (
     <div
       onClick={() => onSelect(tab.id)}
-      className={`group relative flex items-center justify-between gap-2 px-3 py-1 rounded-lg cursor-pointer transition-all border text-xs ${
+      className={`group relative flex items-center justify-between gap-2 px-3 py-1 rounded-xl cursor-pointer transition-all border text-xs select-none ${
         isActive
-          ? 'bg-[var(--browser-surface-secondary)] border-[var(--browser-border-strong)] text-[var(--browser-text-primary)] shadow-sm'
+          ? 'bg-[var(--browser-surface-elevated)] border-[var(--browser-cyan-border)] text-[var(--browser-text-primary)] shadow-sm'
           : 'bg-transparent border-transparent text-[var(--browser-text-secondary)] hover:bg-[var(--browser-surface-hover)] hover:text-[var(--browser-text-primary)]'
-      } ${isVertical ? 'w-full' : 'h-7 max-w-[200px] min-w-[120px]'}`}
+      } ${isVertical ? 'w-full h-8' : 'h-7 max-w-[220px] min-w-[120px]'}`}
     >
       <div className="flex items-center gap-2 truncate">
-        <Globe size={13} className="text-[var(--browser-accent)] shrink-0" />
+        <Globe size={13} className={isActive ? 'text-[var(--browser-accent-cyan)]' : 'text-[var(--browser-text-muted)]'} />
         <span className="truncate font-medium">{tab.title || 'New Tab'}</span>
       </div>
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          onClose(tab.id);
-        }}
-        className="opacity-0 group-hover:opacity-100 p-0.5 rounded text-[var(--browser-text-muted)] hover:text-[var(--browser-danger)] hover:bg-[var(--browser-surface-hover)] transition-opacity"
-      >
-        <X size={12} />
-      </button>
+
+      <div className="flex items-center gap-1 shrink-0">
+        {tab.isSleeping && (
+          <span title="Tab sleeping to save memory">
+            <Moon size={11} className="text-[var(--browser-text-muted)]" />
+          </span>
+        )}
+
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onClose(tab.id);
+          }}
+          title="Close Tab"
+          className="opacity-0 group-hover:opacity-100 p-0.5 rounded text-[var(--browser-text-muted)] hover:text-[var(--browser-danger)] hover:bg-[var(--browser-surface-hover)] transition-opacity"
+        >
+          <X size={12} />
+        </button>
+      </div>
     </div>
   );
 };

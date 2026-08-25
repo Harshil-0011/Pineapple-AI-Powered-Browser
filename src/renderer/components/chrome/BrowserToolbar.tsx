@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tab } from '../../../shared/types';
+import { Tab as TabType, Bookmark as BookmarkType, HistoryItem } from '../../../shared/types';
 import { NavigationControls } from './NavigationControls';
 import { Omnibox } from './Omnibox';
 import { ProfileControl } from './ProfileControl';
@@ -7,26 +7,36 @@ import { BrowserMenu } from './BrowserMenu';
 import { Download, Clock } from 'lucide-react';
 
 interface BrowserToolbarProps {
-  activeTab: Tab | null;
+  activeTab: TabType | null;
+  tabs?: TabType[];
+  history?: HistoryItem[];
+  bookmarks?: BookmarkType[];
   onNavigate: (url: string) => void;
+  onSwitchTab?: (id: string) => void;
   onGoBack: () => void;
   onGoForward: () => void;
   onReload: () => void;
   onToggleDownloads?: () => void;
   onToggleHistory?: () => void;
+  onSendAIPrompt?: (prompt: string) => void;
 }
 
 export const BrowserToolbar: React.FC<BrowserToolbarProps> = ({
   activeTab,
+  tabs = [],
+  history = [],
+  bookmarks = [],
   onNavigate,
+  onSwitchTab,
   onGoBack,
   onGoForward,
   onReload,
   onToggleDownloads,
   onToggleHistory,
+  onSendAIPrompt,
 }) => {
   return (
-    <div className="w-full h-11 px-3 flex items-center gap-2 bg-[var(--browser-surface)] border-b border-[var(--browser-border-subtle)] z-[var(--z-chrome)] shrink-0 select-none">
+    <div className="w-full h-11 px-3 flex items-center gap-2.5 bg-[var(--browser-surface)] border-b border-[var(--browser-border-subtle)] z-[var(--z-chrome)] shrink-0 select-none">
       <NavigationControls
         canGoBack={activeTab?.canGoBack}
         canGoForward={activeTab?.canGoForward}
@@ -35,7 +45,15 @@ export const BrowserToolbar: React.FC<BrowserToolbarProps> = ({
         onReload={onReload}
       />
 
-      <Omnibox url={activeTab?.url || ''} onNavigate={onNavigate} />
+      <Omnibox
+        url={activeTab?.url || ''}
+        tabs={tabs}
+        history={history}
+        bookmarks={bookmarks}
+        onNavigate={onNavigate}
+        onSwitchTab={onSwitchTab}
+        onSendAIPrompt={onSendAIPrompt}
+      />
 
       <div className="flex items-center gap-1 shrink-0 ml-auto">
         {onToggleHistory && (
