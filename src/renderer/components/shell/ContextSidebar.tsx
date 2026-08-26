@@ -23,7 +23,7 @@ export const ContextSidebar: React.FC<ContextSidebarProps> = ({
 
     const handleMouseMove = (moveEvent: MouseEvent) => {
       if (!isResizingRef.current) return;
-      const newWidth = Math.max(220, Math.min(400, moveEvent.clientX - 52));
+      const newWidth = Math.max(220, Math.min(420, moveEvent.clientX - 52));
       setSidebarWidth(newWidth);
     };
 
@@ -44,7 +44,7 @@ export const ContextSidebar: React.FC<ContextSidebarProps> = ({
   return (
     <aside
       style={{ width: `${sidebarWidth}px` }}
-      className="relative h-full bg-[var(--browser-surface)] border-r border-[var(--browser-border-subtle)] flex flex-col z-[var(--z-sidebar)] shrink-0 overflow-hidden select-none"
+      className="relative h-full bg-[var(--bg-surface)] border-r border-[var(--border-color)] flex flex-col z-[var(--z-sidebar)] shrink-0 overflow-hidden select-none transition-all duration-200"
     >
       <div className="flex-1 flex flex-col h-full overflow-hidden">
         {children}
@@ -54,7 +54,7 @@ export const ContextSidebar: React.FC<ContextSidebarProps> = ({
       <div
         onMouseDown={startResizing}
         title="Drag to resize sidebar"
-        className="absolute top-0 right-0 w-[4px] h-full cursor-col-resize hover:bg-[var(--browser-accent)] opacity-0 hover:opacity-100 transition-opacity z-10"
+        className="absolute top-0 right-0 w-[4px] h-full cursor-col-resize hover:bg-[var(--claude-orange)] opacity-0 hover:opacity-100 transition-opacity z-10"
       />
     </aside>
   );
