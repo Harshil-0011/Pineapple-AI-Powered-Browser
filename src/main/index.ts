@@ -1,6 +1,7 @@
 import { app, BrowserWindow, BrowserView, ipcMain, session } from 'electron';
 import * as path from 'path';
 import { Tab, PagePerception, AgentAction } from '../shared/types';
+import { mainAgentController } from './agent-controller';
 
 interface TabView {
   id: string;
@@ -399,6 +400,7 @@ class PineappleBrowserMain {
     });
     ipcMain.handle('tab:getPerception', (_, id) => this.getPagePerception(id));
     ipcMain.handle('tab:executeAction', (_, id, action) => this.executeAgentAction(id, action));
+    ipcMain.handle('agent:processRequest', (_, msg, p) => mainAgentController.processRequest(msg, p));
     ipcMain.handle('viewport:updateBounds', (_, bounds) => {
       if (bounds && typeof bounds.x === 'number') {
         this.currentBounds = bounds;

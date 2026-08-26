@@ -11,6 +11,7 @@ contextBridge.exposeInMainWorld('pineapple', {
   reloadTab: (id: string): Promise<void> => ipcRenderer.invoke('tab:reload', id),
   getPerception: (id: string): Promise<PagePerception> => ipcRenderer.invoke('tab:getPerception', id),
   executeAction: (id: string, action: AgentAction): Promise<boolean> => ipcRenderer.invoke('tab:executeAction', id, action),
+  processAgentRequest: (message: string, perception?: PagePerception) => ipcRenderer.invoke('agent:processRequest', message, perception),
   updateViewportBounds: (bounds: { x: number; y: number; width: number; height: number }): Promise<void> => ipcRenderer.invoke('viewport:updateBounds', bounds),
   onTabUpdated: (callback: (tab: Tab) => void) => {
     const handler = (_: any, tab: Tab) => callback(tab);
