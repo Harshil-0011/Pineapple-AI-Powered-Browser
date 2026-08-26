@@ -4,7 +4,8 @@ import { AIChat } from './AIChat';
 import { AXInspector } from './AXInspector';
 import { Skills } from './Skills';
 import { AIContext } from './AIContext';
-import { Sparkles, FileText, X, Bot, Zap, MessageSquare, Terminal } from 'lucide-react';
+import { ThreeAIOrb } from './ThreeAIOrb';
+import { Sparkles, FileText, X } from 'lucide-react';
 
 interface AIPanelProps {
   messages: ChatMessage[];
@@ -47,7 +48,7 @@ export const AIPanel: React.FC<AIPanelProps> = ({
           {onOpenArtifact && (
             <button
               onClick={onOpenArtifact}
-              className="text-[11px] text-[var(--claude-orange-light)] hover:underline flex items-center gap-1 font-medium"
+              className="text-[11px] text-[var(--claude-orange-light)] hover:underline flex items-center gap-1 font-medium cursor-pointer"
             >
               <FileText size={12} /> Artifact
             </button>
@@ -55,7 +56,7 @@ export const AIPanel: React.FC<AIPanelProps> = ({
           {isFloatingOrb && (
             <button
               onClick={() => setIsOpen(false)}
-              className="p-1 rounded-md text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--slate-teal)]"
+              className="p-1 rounded-md text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--slate-teal)] cursor-pointer"
             >
               <X size={14} />
             </button>
@@ -69,7 +70,7 @@ export const AIPanel: React.FC<AIPanelProps> = ({
           <button
             key={chip}
             onClick={() => onSendMessage(chip)}
-            className="px-2.5 py-1 rounded-full text-[10px] font-medium bg-[var(--slate-teal)] text-[var(--text-primary)] hover:bg-[var(--claude-orange)] transition-all whitespace-nowrap shrink-0 border border-[var(--border-color-subtle)]"
+            className="px-2.5 py-1 rounded-full text-[10px] font-medium bg-[var(--slate-teal)] text-[var(--text-primary)] hover:bg-[var(--claude-orange)] transition-all whitespace-nowrap shrink-0 border border-[var(--border-color-subtle)] cursor-pointer"
           >
             {chip}
           </button>
@@ -82,7 +83,7 @@ export const AIPanel: React.FC<AIPanelProps> = ({
           <button
             key={st}
             onClick={() => setSubTab(st)}
-            className={`flex-1 py-1 text-[10px] font-semibold uppercase tracking-wider rounded-md transition-all ${
+            className={`flex-1 py-1 text-[10px] font-semibold uppercase tracking-wider rounded-md transition-all cursor-pointer ${
               subTab === st
                 ? 'bg-[var(--dark-teal-deep)] text-[var(--claude-orange-light)] border border-[var(--border-color-glow)] shadow-sm'
                 : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
@@ -106,17 +107,9 @@ export const AIPanel: React.FC<AIPanelProps> = ({
 
   return (
     <>
-      {/* Floating AI Orb trigger on browser viewport */}
+      {/* Three.js 3D Spatial AI Orb floating on browser screen */}
       <div className="fixed bottom-6 right-6 z-[var(--z-floating)]">
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          title="Toggle AI Companion Chatbox"
-          className="relative w-14 h-14 rounded-full bg-gradient-to-tr from-[var(--dark-teal)] via-[var(--slate-teal)] to-[var(--claude-orange)] p-[2px] ai-orb-glow cursor-pointer transition-transform hover:scale-105 active:scale-95"
-        >
-          <div className="w-full h-full rounded-full bg-[var(--dark-teal-deep)] flex items-center justify-center text-[var(--claude-orange-light)]">
-            <Bot size={24} className="animate-pulse" />
-          </div>
-        </button>
+        <ThreeAIOrb onClick={() => setIsOpen(!isOpen)} />
       </div>
 
       {/* Floating Chatbox Popover / Window */}
