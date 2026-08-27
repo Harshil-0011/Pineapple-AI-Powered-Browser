@@ -1,5 +1,5 @@
 import React from 'react';
-import { FileText, X, Download, Share2, Sparkles } from 'lucide-react';
+import { X, Download, Share2, Sparkles } from 'lucide-react';
 
 interface ArtifactViewerProps {
   isOpen: boolean;
@@ -21,7 +21,7 @@ export const ArtifactViewer: React.FC<ArtifactViewerProps> = ({
     <div className="fixed inset-y-0 right-0 w-[440px] glass-strong border-l border-[var(--browser-border-strong)] z-[var(--z-overlay)] flex flex-col p-5 shadow-2xl animate-slide-in-left select-none">
       <div className="flex items-center justify-between pb-3.5 border-b border-[var(--browser-border-subtle)]">
         <div className="flex items-center gap-2">
-          <Sparkles size={16} className="text-[var(--browser-accent-purple)]" />
+          <Sparkles size={16} className="text-[var(--browser-accent)]" />
           <span className="text-xs font-semibold text-[var(--browser-text-primary)] truncate max-w-[280px]">
             {title}
           </span>
@@ -35,7 +35,7 @@ export const ArtifactViewer: React.FC<ArtifactViewerProps> = ({
       </div>
 
       <div className="flex-1 my-4 overflow-y-auto p-4 rounded-2xl bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-subtle)] text-xs text-[var(--browser-text-primary)] leading-relaxed">
-        <div className="text-[11px] font-semibold text-[var(--browser-accent-cyan)] uppercase tracking-wider mb-2">
+        <div className="text-[11px] font-semibold text-[var(--browser-accent)] uppercase tracking-wider mb-2">
           AI Synthesized Research Artifact
         </div>
         {data?.summary || 'Synthesized pricing structures, key capabilities, and value propositions across top software competitors in the workspace.'}
@@ -45,7 +45,7 @@ export const ArtifactViewer: React.FC<ArtifactViewerProps> = ({
         <button className="capsule px-3.5 py-1.5 text-xs text-[var(--browser-text-secondary)] hover:text-[var(--browser-text-primary)] flex items-center gap-1.5">
           <Share2 size={12} /> Share
         </button>
-        <button className="capsule px-3.5 py-1.5 text-xs text-[#080A0D] bg-[var(--browser-accent-cyan)] font-semibold flex items-center gap-1.5">
+        <button className="capsule px-3.5 py-1.5 text-xs text-[#090B0F] bg-[var(--browser-accent)] font-semibold flex items-center gap-1.5">
           <Download size={12} /> Export CSV
         </button>
       </div>

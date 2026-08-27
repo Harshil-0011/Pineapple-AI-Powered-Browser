@@ -66,7 +66,6 @@ export const App: React.FC = () => {
     const syncViewport = () => {
       if (viewportRef.current && (window as any).pineapple?.updateViewportBounds) {
         const rect = viewportRef.current.getBoundingClientRect();
-        // If viewing history page or settings or blank tab on renderer, hide browser view
         const activeTab = tabs.find((t) => t.id === activeTabId);
         const isNewTab = !activeTab || activeTab.url === 'about:blank' || activeTab.url === 'pineapple://newtab';
 
@@ -223,13 +222,13 @@ export const App: React.FC = () => {
         {activeRailTab === 'workspaces' && (
           <div className="flex-1 flex flex-col h-full p-3.5 gap-3.5 overflow-y-auto">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-semibold text-[var(--browser-text-muted)] tracking-wider uppercase">
+              <span className="text-[11px] font-semibold text-[var(--text-muted)] tracking-wider uppercase">
                 Workspace
               </span>
               <button
                 onClick={handleCreateTab}
                 title="New Tab"
-                className="p-1 rounded-md text-[var(--browser-text-secondary)] hover:text-[var(--browser-text-primary)] hover:bg-[var(--browser-surface-hover)]"
+                className="p-1 rounded-md text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--slate-teal)]"
               >
                 <Plus size={14} />
               </button>
@@ -242,12 +241,12 @@ export const App: React.FC = () => {
             />
 
             <div className="flex items-center justify-between mt-2">
-              <span className="text-[11px] font-semibold text-[var(--browser-text-muted)] tracking-wider uppercase">
+              <span className="text-[11px] font-semibold text-[var(--text-muted)] tracking-wider uppercase">
                 Open Tabs ({tabs.length})
               </span>
               <button
                 onClick={handleCreateTab}
-                className="text-[11px] text-[var(--browser-accent-cyan)] hover:underline flex items-center gap-1 font-medium"
+                className="text-[11px] text-[var(--claude-orange-light)] hover:underline flex items-center gap-1 font-medium"
               >
                 <Plus size={12} /> New Tab
               </button>
@@ -262,12 +261,12 @@ export const App: React.FC = () => {
                     onClick={() => handleSwitchTab(tab.id)}
                     className={`group relative flex items-center justify-between p-2.5 rounded-xl cursor-pointer transition-all border ${
                       isActive
-                        ? 'bg-[var(--browser-surface-selected)] border-[var(--browser-cyan-border)] text-[var(--browser-text-primary)] shadow-sm'
-                        : 'bg-transparent border-transparent text-[var(--browser-text-secondary)] hover:bg-[var(--browser-surface-hover)] hover:text-[var(--browser-text-primary)]'
+                        ? 'bg-[var(--dark-teal)] border-[var(--border-color-glow)] text-[var(--text-primary)] shadow-sm'
+                        : 'bg-transparent border-transparent text-[var(--text-secondary)] hover:bg-[var(--slate-teal)] hover:text-[var(--text-primary)]'
                     }`}
                   >
                     <div className="flex items-center gap-2 overflow-hidden flex-1">
-                      <Globe size={13} className={isActive ? 'text-[var(--browser-accent-cyan)]' : 'text-[var(--browser-text-muted)]'} />
+                      <Globe size={13} className={isActive ? 'text-[var(--claude-orange-light)]' : 'text-[var(--text-muted)]'} />
                       <span className="text-xs truncate font-medium">
                         {tab.title || tab.url || 'New Tab'}
                       </span>
@@ -277,7 +276,7 @@ export const App: React.FC = () => {
                         e.stopPropagation();
                         handleCloseTab(tab.id);
                       }}
-                      className="opacity-0 group-hover:opacity-100 p-1 text-[var(--browser-text-muted)] hover:text-[var(--browser-danger)] rounded-md transition-opacity"
+                      className="opacity-0 group-hover:opacity-100 p-1 text-[var(--text-muted)] hover:text-red-400 rounded-md transition-opacity"
                     >
                       <X size={12} />
                     </button>
@@ -371,6 +370,16 @@ export const App: React.FC = () => {
             )}
           </BrowserViewport>
         )}
+
+        {/* Floating AI Orb overlay directly on screen */}
+        <AIPanel
+          messages={messages}
+          onSendMessage={handleSendMessage}
+          perception={perception}
+          onRefreshPerception={handleRefreshPerception}
+          onOpenArtifact={() => setShowArtifactViewer(true)}
+          isFloatingOrb={true}
+        />
 
         <CommandPalette
           isOpen={showCommandPalette}

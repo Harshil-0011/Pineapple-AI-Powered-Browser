@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Tab, Bookmark } from '../../../shared/types';
-import { Search, Sparkles, Globe, Bookmark as BookmarkIcon, Terminal, X } from 'lucide-react';
+import { Search, Sparkles, X } from 'lucide-react';
 import { CommandResult } from './CommandResult';
 
 interface CommandPaletteProps {
@@ -67,10 +67,10 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-xl glass-strong rounded-2xl p-4 flex flex-col gap-3 shadow-2xl border border-[var(--browser-cyan-border)]"
+        className="w-full max-w-xl glass-strong rounded-2xl p-4 flex flex-col gap-3 shadow-2xl border border-[var(--browser-accent-border)]"
       >
-        <div className="flex items-center gap-2 px-3.5 py-2.5 rounded-full bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-strong)] focus-within:border-[var(--browser-cyan-border)]">
-          <Search size={16} className="text-[var(--browser-accent-cyan)] shrink-0" />
+        <div className="flex items-center gap-2 px-3.5 py-2.5 rounded-full bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-strong)] focus-within:border-[var(--browser-accent-border)]">
+          <Search size={16} className="text-[var(--browser-accent)] shrink-0" />
           <input
             type="text"
             autoFocus
@@ -94,15 +94,15 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
               }}
               className={`p-3 rounded-xl flex items-center justify-between cursor-pointer transition-all border ${
                 selectedIndex === 0
-                  ? 'bg-[var(--browser-surface-selected)] border-[var(--browser-cyan-border)]'
+                  ? 'bg-[var(--browser-surface-selected)] border-[var(--browser-accent-border)]'
                   : 'bg-[var(--browser-surface-secondary)] border-[var(--browser-border-subtle)] hover:bg-[var(--browser-surface-hover)]'
               }`}
             >
               <div className="flex items-center gap-2 text-xs font-medium text-[var(--browser-text-primary)]">
-                <Sparkles size={14} className="text-[var(--browser-accent-cyan)]" />
+                <Sparkles size={14} className="text-[var(--browser-accent)]" />
                 <span>Ask Pineapple AI: "{query}"</span>
               </div>
-              <span className="text-[10px] text-[var(--browser-accent-cyan)] uppercase font-semibold px-2 py-0.5 rounded-full bg-[rgba(6,182,212,0.12)]">
+              <span className="text-[10px] text-[var(--browser-accent)] uppercase font-semibold px-2 py-0.5 rounded-full bg-amber-500/10">
                 Execute
               </span>
             </div>

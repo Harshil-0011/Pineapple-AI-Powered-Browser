@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Sparkles, Globe, Compass, ArrowRight, Github, FileText, Bookmark, Clock } from 'lucide-react';
+import { Sparkles, Globe, Compass, ArrowRight, Github, FileText, Clock, Bookmark, Laptop, Briefcase, BookOpen } from 'lucide-react';
 
 interface NewTabPageProps {
   onNavigate: (url: string) => void;
@@ -21,10 +21,23 @@ export const NewTabPage: React.FC<NewTabPageProps> = ({
     return 'Good evening';
   };
 
+  const getWorkspaceIcon = () => {
+    switch (activeWorkspace.toLowerCase()) {
+      case 'work':
+        return <Briefcase size={12} />;
+      case 'research':
+        return <BookOpen size={12} />;
+      case 'development':
+        return <Laptop size={12} />;
+      default:
+        return <Sparkles size={12} />;
+    }
+  };
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (!query.trim()) return;
-    if (query.startsWith('http://') || query.startsWith('https://') || query.includes('.')) {
+    if (query.startsWith('http://') || query.startsWith('https://') || (query.includes('.') && !query.includes(' '))) {
       onNavigate(query.trim());
     } else {
       onSendAIPrompt(query.trim());
@@ -39,83 +52,86 @@ export const NewTabPage: React.FC<NewTabPageProps> = ({
   ];
 
   return (
-    <div className="relative w-full h-full bg-[var(--browser-canvas-deep)] text-[var(--browser-text-primary)] flex flex-col items-center justify-center p-8 overflow-y-auto select-none">
-      {/* Subtle Atmospheric Gradient Aura (Section 37) */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.12),transparent_70%)] blur-3xl opacity-80" />
-        <div className="absolute bottom-10 right-20 w-[400px] h-[300px] bg-[radial-gradient(circle_at_center,rgba(167,139,250,0.08),transparent_70%)] blur-3xl opacity-70" />
-      </div>
+    <div className="relative w-full h-full bg-[var(--bg-base)] text-[var(--text-primary)] flex flex-col items-center justify-center p-8 overflow-y-auto select-none">
+      {/* Background Ambient Glow */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-[var(--dark-teal)] via-[var(--bg-base)] to-[var(--dark-teal-deep)] opacity-60 pointer-events-none" />
 
       <div className="relative z-10 max-w-2xl w-full flex flex-col items-center gap-8 animate-fade-in">
-        {/* Time Greeting Header */}
-        <div className="flex flex-col items-center gap-2 text-center">
-          <span className="text-xs font-semibold uppercase tracking-widest text-[var(--browser-accent-cyan)] px-3 py-1 rounded-full bg-[rgba(6,182,212,0.12)] border border-[var(--browser-cyan-border)]">
-            {activeWorkspace} Workspace
+        {/* Workspace Pill & Greeting */}
+        <div className="flex flex-col items-center gap-3 text-center">
+          <span className="text-[11px] font-semibold uppercase tracking-widest text-[var(--claude-orange-light)] px-3 py-1 rounded-full bg-[var(--dark-teal)] border border-[var(--border-color-glow)] flex items-center gap-1.5 shadow-md">
+            {getWorkspaceIcon()} {activeWorkspace} Workspace
           </span>
-          <h1 className="text-4xl font-bold font-[var(--font-display)] tracking-tight text-[var(--browser-text-primary)]">
+          <h1 className="text-4xl font-bold tracking-tight text-[var(--text-primary)] font-sans">
             {getGreeting()}
           </h1>
-          <p className="text-xs text-[var(--browser-text-muted)] max-w-md">
-            Your quiet spatial desktop workspace is active. Search the web or prompt Pineapple AI.
+          <p className="text-xs text-[var(--text-secondary)] max-w-md">
+            Your spatial desktop workspace is active. Search the web or prompt Pineapple AI.
           </p>
         </div>
 
-        {/* Expressive Capsule Omnibox Input */}
+        {/* Ambient Glassmorphism Capsule Search Bar */}
         <form
           onSubmit={handleSearch}
-          className="w-full max-w-xl h-12 px-4 rounded-full glass-elevated bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-strong)] focus-within:border-[var(--browser-cyan-border)] focus-within:ring-2 focus-within:ring-[rgba(6,182,212,0.22)] shadow-xl flex items-center gap-3 transition-all"
+          className="w-full max-w-xl h-12 px-4 rounded-full glass-panel bg-[var(--dark-teal)] border border-[var(--border-color-glow)] focus-within:border-[var(--claude-orange)] shadow-xl flex items-center gap-3 transition-all"
         >
-          <Sparkles size={18} className="text-[var(--browser-accent-cyan)] shrink-0" />
+          <Sparkles size={18} className="text-[var(--claude-orange)] shrink-0" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search the web or ask Pineapple AI..."
-            className="flex-1 bg-transparent border-none outline-none text-xs text-[var(--browser-text-primary)] placeholder-[var(--browser-text-muted)]"
+            placeholder="Search web or prompt Pineapple AI agent..."
+            className="flex-1 bg-transparent border-none outline-none text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)]"
           />
           <button
             type="submit"
-            className="w-8 h-8 rounded-full bg-[var(--browser-accent-cyan)] text-[#080A0D] flex items-center justify-center hover:scale-105 transition-transform"
+            className="w-8 h-8 rounded-full bg-[var(--claude-orange)] text-white font-semibold flex items-center justify-center hover:scale-105 transition-transform shadow-md"
           >
             <ArrowRight size={14} />
           </button>
         </form>
 
-        {/* Quick Site Shortcuts */}
+        {/* Quick Dial Shortcuts */}
         <div className="flex items-center gap-3 flex-wrap justify-center">
           {quickSites.map((site) => (
             <button
               key={site.title}
               onClick={() => onNavigate(site.url)}
-              className="capsule px-4 py-2.5 text-xs text-[var(--browser-text-primary)] flex items-center gap-2 hover:border-[var(--browser-cyan-border)] hover:bg-[var(--browser-surface-hover)] transition-all"
+              className="px-4 py-2.5 rounded-2xl glass-card bg-[var(--dark-teal)] border border-[var(--border-color-subtle)] text-xs text-[var(--text-primary)] flex items-center gap-2.5 hover:border-[var(--border-color-glow)] hover:bg-[var(--slate-teal)] transition-all shadow-sm"
             >
-              <span className="text-[var(--browser-accent-cyan)]">{site.icon}</span>
+              <span className="text-[var(--claude-orange-light)]">{site.icon}</span>
               <span className="font-medium">{site.title}</span>
             </button>
           ))}
         </div>
 
-        {/* Recent Workspace Context */}
-        <div className="w-full max-w-md p-4 rounded-2xl glass-subtle bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-subtle)] flex flex-col gap-2.5">
-          <div className="flex items-center justify-between text-[11px] font-semibold uppercase tracking-wider text-[var(--browser-text-muted)]">
+        {/* Recent Workspace Cards */}
+        <div className="w-full max-w-md p-4 rounded-2xl glass-card bg-[var(--dark-teal-deep)] border border-[var(--border-color)] flex flex-col gap-3 shadow-lg">
+          <div className="flex items-center justify-between text-[11px] font-semibold uppercase tracking-wider text-[var(--text-muted)]">
             <span className="flex items-center gap-1.5">
-              <Clock size={12} className="text-[var(--browser-accent-cyan)]" /> Continue where you left off
+              <Clock size={13} className="text-[var(--claude-orange)]" /> Recent Workspace History
             </span>
           </div>
           <div className="flex flex-col gap-1.5 text-xs">
             <div
               onClick={() => onNavigate('https://github.com')}
-              className="p-2 rounded-xl bg-transparent hover:bg-[var(--browser-surface-hover)] flex items-center justify-between cursor-pointer transition-colors"
+              className="p-2.5 rounded-xl bg-transparent hover:bg-[var(--slate-teal)] flex items-center justify-between cursor-pointer transition-colors"
             >
-              <span className="text-[var(--browser-text-primary)] font-medium">GitHub Repository Workspace</span>
-              <span className="text-[10px] text-[var(--browser-text-muted)]">github.com</span>
+              <div className="flex items-center gap-2">
+                <Github size={14} className="text-[var(--claude-orange-light)]" />
+                <span className="text-[var(--text-primary)] font-medium">GitHub Repository Workspace</span>
+              </div>
+              <span className="text-[10px] text-[var(--text-muted)]">github.com</span>
             </div>
             <div
               onClick={() => onNavigate('https://www.google.com')}
-              className="p-2 rounded-xl bg-transparent hover:bg-[var(--browser-surface-hover)] flex items-center justify-between cursor-pointer transition-colors"
+              className="p-2.5 rounded-xl bg-transparent hover:bg-[var(--slate-teal)] flex items-center justify-between cursor-pointer transition-colors"
             >
-              <span className="text-[var(--browser-text-primary)] font-medium">Google Search Engine</span>
-              <span className="text-[10px] text-[var(--browser-text-muted)]">google.com</span>
+              <div className="flex items-center gap-2">
+                <Globe size={14} className="text-[var(--claude-orange-light)]" />
+                <span className="text-[var(--text-primary)] font-medium">Google Search Engine</span>
+              </div>
+              <span className="text-[10px] text-[var(--text-muted)]">google.com</span>
             </div>
           </div>
         </div>

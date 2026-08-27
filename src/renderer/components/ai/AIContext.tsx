@@ -1,6 +1,6 @@
 import React from 'react';
 import { PagePerception } from '../../../shared/types';
-import { Globe, Layers, ShieldCheck, Database, FileCode } from 'lucide-react';
+import { Globe, ShieldCheck, Database, FileCode } from 'lucide-react';
 
 interface AIContextProps {
   perception: PagePerception | null;
@@ -13,7 +13,7 @@ export const AIContext: React.FC<AIContextProps> = ({ perception }) => {
         <span className="text-[11px] font-semibold text-[var(--browser-text-muted)] uppercase tracking-wider">
           Active Page Context
         </span>
-        <span className="px-2 py-0.5 rounded-full text-[10px] bg-[rgba(6,182,212,0.15)] text-[var(--browser-accent-cyan)] border border-[var(--browser-cyan-border)] font-mono">
+        <span className="px-2 py-0.5 rounded-full text-[10px] bg-amber-500/10 text-[var(--browser-accent)] border border-[var(--browser-accent-border)] font-mono">
           Live Sync
         </span>
       </div>
@@ -21,7 +21,7 @@ export const AIContext: React.FC<AIContextProps> = ({ perception }) => {
       {/* Page Summary Card */}
       <div className="p-3 rounded-xl bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-subtle)] flex flex-col gap-2">
         <div className="flex items-center gap-2 text-[var(--browser-text-primary)] font-medium">
-          <Globe size={14} className="text-[var(--browser-accent-cyan)] shrink-0" />
+          <Globe size={14} className="text-[var(--browser-accent)] shrink-0" />
           <span className="truncate">{perception?.title || 'No Active Web Page'}</span>
         </div>
         <div className="text-[11px] text-[var(--browser-text-muted)] truncate font-mono">
@@ -32,10 +32,10 @@ export const AIContext: React.FC<AIContextProps> = ({ perception }) => {
       {/* Interactive Perception Controls Count */}
       <div className="p-3 rounded-xl bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-subtle)] flex items-center justify-between">
         <div className="flex items-center gap-2 text-[var(--browser-text-secondary)]">
-          <FileCode size={14} className="text-[var(--browser-accent-cyan)]" />
+          <FileCode size={14} className="text-[var(--browser-accent)]" />
           <span>Interactive Ref Elements</span>
         </div>
-        <span className="font-mono font-semibold text-[var(--browser-accent-cyan)]">
+        <span className="font-mono font-semibold text-[var(--browser-accent)]">
           {perception?.elements?.length || 0}
         </span>
       </div>

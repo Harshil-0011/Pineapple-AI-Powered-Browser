@@ -4,7 +4,8 @@ import { AIChat } from './AIChat';
 import { AXInspector } from './AXInspector';
 import { Skills } from './Skills';
 import { AIContext } from './AIContext';
-import { Sparkles, FileText } from 'lucide-react';
+import { ThreeAIOrb } from './ThreeAIOrb';
+import { Sparkles, FileText, X } from 'lucide-react';
 
 interface AIPanelProps {
   messages: ChatMessage[];
@@ -12,6 +13,7 @@ interface AIPanelProps {
   perception: PagePerception | null;
   onRefreshPerception: () => void;
   onOpenArtifact?: () => void;
+  isFloatingOrb?: boolean;
 }
 
 export const AIPanel: React.FC<AIPanelProps> = ({
@@ -20,38 +22,71 @@ export const AIPanel: React.FC<AIPanelProps> = ({
   perception,
   onRefreshPerception,
   onOpenArtifact,
+  isFloatingOrb = false,
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [subTab, setSubTab] = useState<'chat' | 'dom' | 'skills' | 'context'>('chat');
 
-  return (
-    <div className="flex-1 flex flex-col h-full overflow-hidden select-none">
-      <div className="p-3 border-b border-[var(--browser-border-subtle)] flex items-center justify-between">
+  const quickActionChips = [
+    'Summarize this page',
+    'Extract tables & links',
+    'Draft email reply',
+    'Explain concepts',
+  ];
+
+  const panelContent = (
+    <div className="flex-1 flex flex-col h-full overflow-hidden select-none bg-[var(--bg-surface)]">
+      {/* Panel Header */}
+      <div className="p-3 border-b border-[var(--border-color)] flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Sparkles size={16} className="text-[var(--browser-accent-cyan)]" />
-          <span className="text-xs font-semibold text-[var(--browser-text-primary)]">
+          <Sparkles size={16} className="text-[var(--claude-orange)]" />
+          <span className="text-xs font-semibold text-[var(--text-primary)]">
             Pineapple AI Companion
           </span>
         </div>
-        {onOpenArtifact && (
+        <div className="flex items-center gap-2">
+          {onOpenArtifact && (
+            <button
+              onClick={onOpenArtifact}
+              className="text-[11px] text-[var(--claude-orange-light)] hover:underline flex items-center gap-1 font-medium cursor-pointer"
+            >
+              <FileText size={12} /> Artifact
+            </button>
+          )}
+          {isFloatingOrb && (
+            <button
+              onClick={() => setIsOpen(false)}
+              className="p-1 rounded-md text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--slate-teal)] cursor-pointer"
+            >
+              <X size={14} />
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Quick Action Chips */}
+      <div className="p-2 border-b border-[var(--border-color-subtle)] bg-[var(--dark-teal-deep)] flex items-center gap-1.5 overflow-x-auto">
+        {quickActionChips.map((chip) => (
           <button
-            onClick={onOpenArtifact}
-            className="text-[11px] text-[var(--browser-accent-purple)] hover:underline flex items-center gap-1 font-medium"
+            key={chip}
+            onClick={() => onSendMessage(chip)}
+            className="px-2.5 py-1 rounded-full text-[10px] font-medium bg-[var(--slate-teal)] text-[var(--text-primary)] hover:bg-[var(--claude-orange)] transition-all whitespace-nowrap shrink-0 border border-[var(--border-color-subtle)] cursor-pointer"
           >
-            <FileText size={12} /> Artifact
+            {chip}
           </button>
-        )}
+        ))}
       </div>
 
       {/* 4 AI Sub-tabs (Chat, DOM / AX Tree, Skills, Context) */}
-      <div className="flex items-center gap-1 p-1.5 bg-[var(--browser-surface-secondary)] border-b border-[var(--browser-border-subtle)]">
+      <div className="flex items-center gap-1 p-1.5 bg-[var(--dark-teal)] border-b border-[var(--border-color-subtle)]">
         {(['chat', 'dom', 'skills', 'context'] as const).map((st) => (
           <button
             key={st}
             onClick={() => setSubTab(st)}
-            className={`flex-1 py-1 text-[10px] font-semibold uppercase tracking-wider rounded-md transition-all ${
+            className={`flex-1 py-1 text-[10px] font-semibold uppercase tracking-wider rounded-md transition-all cursor-pointer ${
               subTab === st
-                ? 'bg-[var(--browser-surface-elevated)] text-[var(--browser-accent-cyan)] border border-[var(--browser-cyan-border)] shadow-sm'
-                : 'text-[var(--browser-text-muted)] hover:text-[var(--browser-text-secondary)]'
+                ? 'bg-[var(--dark-teal-deep)] text-[var(--claude-orange-light)] border border-[var(--border-color-glow)] shadow-sm'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
             }`}
           >
             {st === 'dom' ? 'DOM' : st}
@@ -64,5 +99,25 @@ export const AIPanel: React.FC<AIPanelProps> = ({
       {subTab === 'skills' && <Skills onRunSkill={onSendMessage} />}
       {subTab === 'context' && <AIContext perception={perception} />}
     </div>
+  );
+
+  if (!isFloatingOrb) {
+    return panelContent;
+  }
+
+  return (
+    <>
+      {/* Three.js 3D Spatial AI Orb floating on browser screen */}
+      <div className="fixed bottom-6 right-6 z-[var(--z-floating)]">
+        <ThreeAIOrb onClick={() => setIsOpen(!isOpen)} />
+      </div>
+
+      {/* Floating Chatbox Popover / Window */}
+      {isOpen && (
+        <div className="fixed bottom-24 right-6 w-[420px] h-[580px] rounded-2xl glass-panel shadow-2xl border border-[var(--border-color-glow)] flex flex-col z-[var(--z-floating)] overflow-hidden animate-fade-in">
+          {panelContent}
+        </div>
+      )}
+    </>
   );
 };
