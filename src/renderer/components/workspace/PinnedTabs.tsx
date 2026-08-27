@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tab as TabType } from '../../../shared/types';
-import { Pin } from 'lucide-react';
+import { Pin, Globe } from 'lucide-react';
 
 interface PinnedTabsProps {
   tabs: TabType[];
@@ -11,17 +11,21 @@ export const PinnedTabs: React.FC<PinnedTabsProps> = ({ tabs, onSelect }) => {
   if (tabs.length === 0) return null;
 
   return (
-    <div className="flex items-center gap-1 pb-2 border-b border-[var(--browser-border-subtle)] mb-2">
-      <Pin size={12} className="text-[var(--browser-accent-cyan)] shrink-0" />
-      <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
+    <div className="flex flex-col gap-1.5 pb-2.5 border-b border-[var(--border-color-subtle)] mb-1">
+      <div className="flex items-center gap-1.5 text-[10px] font-semibold text-[var(--text-muted)] uppercase tracking-wider">
+        <Pin size={11} className="text-[var(--claude-orange)]" /> Pinned Favorites
+      </div>
+      <div className="grid grid-cols-4 gap-1.5">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => onSelect(tab.id)}
-            title={tab.title}
-            className="w-7 h-7 rounded-lg bg-[var(--browser-surface-secondary)] border border-[var(--browser-border-subtle)] flex items-center justify-center text-[10px] font-bold text-[var(--browser-text-primary)] hover:border-[var(--browser-accent)]"
+            title={tab.title || tab.url}
+            className="h-9 rounded-xl bg-[var(--dark-teal)] border border-[var(--border-color-subtle)] hover:border-[var(--border-color-glow)] hover:bg-[var(--slate-teal)] flex items-center justify-center text-xs font-bold text-[var(--claude-orange-light)] transition-all shadow-sm group"
           >
-            {tab.title.charAt(0).toUpperCase()}
+            <span className="group-hover:scale-110 transition-transform">
+              {(tab.title || tab.url || 'P').charAt(0).toUpperCase()}
+            </span>
           </button>
         ))}
       </div>

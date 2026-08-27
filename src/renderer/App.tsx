@@ -9,6 +9,7 @@ import { TabBar } from './components/chrome/TabBar';
 import { BrowserToolbar } from './components/chrome/BrowserToolbar';
 import { BookmarksBar } from './components/chrome/BookmarksBar';
 import { WorkspaceSwitcher } from './components/workspace/WorkspaceSwitcher';
+import { PinnedTabs } from './components/workspace/PinnedTabs';
 import { AIPanel } from './components/ai/AIPanel';
 import { Bookmarks } from './components/browser-features/Bookmarks';
 import { History } from './components/browser-features/History';
@@ -18,7 +19,7 @@ import { CommandPalette } from './components/command/CommandPalette';
 import { ArtifactViewer } from './components/command/ArtifactViewer';
 import { NewTabPage } from './components/command/NewTabPage';
 import { agentService } from './agent-service';
-import { Plus, X, Globe } from 'lucide-react';
+import { Plus, X, Globe, Volume2, Moon } from 'lucide-react';
 import './styles.css';
 
 export const App: React.FC = () => {
@@ -26,8 +27,12 @@ export const App: React.FC = () => {
   const [activeWorkspaceName, setActiveWorkspaceName] = useState<string>('Personal');
   const [themeMode, setThemeMode] = useState<'dark' | 'light'>('dark');
 
-  const [tabs, setTabs] = useState<TabType[]>([]);
-  const [activeTabId, setActiveTabId] = useState<string>('');
+  const [tabs, setTabs] = useState<TabType[]>([
+    { id: 'tab_google', url: 'https://www.google.com', title: 'Google Search Engine', isLoading: false, canGoBack: false, canGoForward: false },
+    { id: 'tab_github', url: 'https://github.com', title: 'GitHub Workspace', isLoading: false, canGoBack: false, canGoForward: false, isSleeping: true },
+    { id: 'tab_news', url: 'https://news.ycombinator.com', title: 'Hacker News Community', isLoading: false, canGoBack: false, canGoForward: false, isPlayingAudio: true },
+  ]);
+  const [activeTabId, setActiveTabId] = useState<string>('tab_google');
   const [perception, setPerception] = useState<PagePerception | null>(null);
   const [isVerticalTabs, setIsVerticalTabs] = useState<boolean>(false);
   const [showDownloads, setShowDownloads] = useState<boolean>(false);
@@ -108,8 +113,10 @@ export const App: React.FC = () => {
   useEffect(() => {
     if ((window as any).pineapple) {
       const unsubChanged = (window as any).pineapple.onTabsChanged((updatedTabs: TabType[], newActiveId: string) => {
-        setTabs(updatedTabs);
-        setActiveTabId(newActiveId);
+        if (updatedTabs && updatedTabs.length > 0) {
+          setTabs(updatedTabs);
+          setActiveTabId(newActiveId);
+        }
       });
 
       const unsubUpdated = (window as any).pineapple.onTabUpdated((updatedTab: TabType) => {
@@ -133,40 +140,71 @@ export const App: React.FC = () => {
   const isNewTab = !activeTab || activeTab.url === 'about:blank' || activeTab.url === 'pineapple://newtab';
 
   const handleCreateTab = () => {
-    (window as any).pineapple?.createTab('about:blank');
+    if ((window as any).pineapple?.createTab) {
+      (window as any).pineapple.createTab('about:blank');
+    } else {
+      const newTabObj: TabType = {
+        id: `tab_${Date.now()}`,
+        url: 'about:blank',
+        title: 'New Tab',
+        isLoading: false,
+        canGoBack: false,
+        canGoForward: false,
+      };
+      setTabs((prev) => [...prev, newTabObj]);
+      setActiveTabId(newTabObj.id);
+    }
   };
 
   const handleCloseTab = (id: string) => {
-    (window as any).pineapple?.closeTab(id);
+    if ((window as any).pineapple?.closeTab) {
+      (window as any).pineapple.closeTab(id);
+    } else {
+      const filtered = tabs.filter((t) => t.id !== id);
+      setTabs(filtered);
+      if (activeTabId === id && filtered.length > 0) {
+        setActiveTabId(filtered[filtered.length - 1].id);
+      }
+    }
   };
 
   const handleSwitchTab = (id: string) => {
     setShowHistoryView(false);
-    (window as any).pineapple?.switchTab(id);
+    if ((window as any).pineapple?.switchTab) {
+      (window as any).pineapple.switchTab(id);
+    } else {
+      setActiveTabId(id);
+    }
   };
 
   const handleNavigate = (url: string) => {
     setShowHistoryView(false);
     if (activeTabId) {
-      (window as any).pineapple?.navigateTab(activeTabId, url);
+      if ((window as any).pineapple?.navigateTab) {
+        (window as any).pineapple.navigateTab(activeTabId, url);
+      } else {
+        setTabs((prev) =>
+          prev.map((t) => (t.id === activeTabId ? { ...t, url, title: url } : t))
+        );
+      }
     }
   };
 
   const handleGoBack = () => {
-    if (activeTabId) {
-      (window as any).pineapple?.goBack(activeTabId);
+    if (activeTabId && (window as any).pineapple?.goBack) {
+      (window as any).pineapple.goBack(activeTabId);
     }
   };
 
   const handleGoForward = () => {
-    if (activeTabId) {
-      (window as any).pineapple?.goForward(activeTabId);
+    if (activeTabId && (window as any).pineapple?.goForward) {
+      (window as any).pineapple.goForward(activeTabId);
     }
   };
 
   const handleReload = () => {
-    if (activeTabId) {
-      (window as any).pineapple?.reloadTab(activeTabId);
+    if (activeTabId && (window as any).pineapple?.reloadTab) {
+      (window as any).pineapple.reloadTab(activeTabId);
     }
   };
 
@@ -208,6 +246,8 @@ export const App: React.FC = () => {
     }
   };
 
+  const pinnedTabsList = tabs.slice(0, 3);
+
   return (
     <BrowserShell theme={themeMode}>
       {/* LAYER 1: Control Rail */}
@@ -228,7 +268,7 @@ export const App: React.FC = () => {
               <button
                 onClick={handleCreateTab}
                 title="New Tab"
-                className="p-1 rounded-md text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--slate-teal)]"
+                className="p-1 rounded-md text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--slate-teal)] cursor-pointer"
               >
                 <Plus size={14} />
               </button>
@@ -240,13 +280,16 @@ export const App: React.FC = () => {
               onSwitch={(ws: string) => setActiveWorkspaceName(ws)}
             />
 
-            <div className="flex items-center justify-between mt-2">
+            {/* Pinned Favorite Tabs Grid */}
+            <PinnedTabs tabs={pinnedTabsList} onSelect={handleSwitchTab} />
+
+            <div className="flex items-center justify-between mt-1">
               <span className="text-[11px] font-semibold text-[var(--text-muted)] tracking-wider uppercase">
                 Open Tabs ({tabs.length})
               </span>
               <button
                 onClick={handleCreateTab}
-                className="text-[11px] text-[var(--claude-orange-light)] hover:underline flex items-center gap-1 font-medium"
+                className="text-[11px] text-[var(--claude-orange-light)] hover:underline flex items-center gap-1 font-medium cursor-pointer"
               >
                 <Plus size={12} /> New Tab
               </button>
@@ -271,15 +314,28 @@ export const App: React.FC = () => {
                         {tab.title || tab.url || 'New Tab'}
                       </span>
                     </div>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleCloseTab(tab.id);
-                      }}
-                      className="opacity-0 group-hover:opacity-100 p-1 text-[var(--text-muted)] hover:text-red-400 rounded-md transition-opacity"
-                    >
-                      <X size={12} />
-                    </button>
+
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      {tab.isPlayingAudio && (
+                        <span title="Playing audio">
+                          <Volume2 size={13} className="text-[var(--claude-orange)] animate-pulse" />
+                        </span>
+                      )}
+                      {tab.isSleeping && (
+                        <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-[var(--slate-teal)] text-[var(--text-muted)] flex items-center gap-1">
+                          <Moon size={9} /> Sleeping
+                        </span>
+                      )}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleCloseTab(tab.id);
+                        }}
+                        className="opacity-0 group-hover:opacity-100 p-1 text-[var(--text-muted)] hover:text-red-400 rounded-md transition-opacity cursor-pointer"
+                      >
+                        <X size={12} />
+                      </button>
+                    </div>
                   </div>
                 );
               })}
@@ -371,7 +427,7 @@ export const App: React.FC = () => {
           </BrowserViewport>
         )}
 
-        {/* Floating AI Orb overlay directly on screen */}
+        {/* Floating Three.js 3D AI Orb overlay directly on screen */}
         <AIPanel
           messages={messages}
           onSendMessage={handleSendMessage}

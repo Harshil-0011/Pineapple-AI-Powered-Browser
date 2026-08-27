@@ -7,6 +7,7 @@ export interface Tab {
   canGoBack: boolean;
   canGoForward: boolean;
   isSleeping?: boolean;
+  isPlayingAudio?: boolean;
 }
 
 export type TabInfo = Tab;
